@@ -1,112 +1,60 @@
-import React from "react";
-
-export default function Dashboard() {
-  return (
-    <div
-      style={{
-        backgroundColor: "#111",
-        height: "100vh",
-        display: "flex",
-        color: "lime",
-        fontFamily: "Arial, sans-serif",
-      }}
-    >
-      {/* Left Sidebar */}
-      <div
-        style={{
-          width: "300px",
-          borderRight: "4px solid lime",
-          padding: "20px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center", // center horizontally
-          gap: "20px",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <span style={{ fontSize: "24px", color: "#0ff", fontWeight: "bold" }}>
-            ⚙️ MENU
-          </span>
-        </div>
-
-        {/* Buttons container horizontally centered */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: "20px",
-            width: "100%", // take full width of sidebar
-          }}
-        >
-          <button
-            style={{
-              border: "2px solid lime",
-              background: "transparent",
-              color: "lime",
-              fontSize: "16px",
-              padding: "10px 20px",
-              borderRadius: "10px",
-              cursor: "pointer",
-              transition: "0.3s",
-            }}
-            onMouseEnter={(e) => (e.target.style.background = "lime")}
-            onMouseLeave={(e) => (e.target.style.background = "transparent")}
-          >
-            ➕ Create Task
-          </button>
-          <button
-            style={{
-              border: "2px solid lime",
-              background: "transparent",
-              color: "lime",
-              fontSize: "16px",
-              padding: "10px 20px",
-              borderRadius: "10px",
-              cursor: "pointer",
-              transition: "0.3s",
-            }}
-            onMouseEnter={(e) => (e.target.style.background = "lime")}
-            onMouseLeave={(e) => (e.target.style.background = "transparent")}
-          >
-            📋 View Specs
-          </button>
-          <button
-            style={{
-              border: "2px solid lime",
-              background: "transparent",
-              color: "lime",
-              fontSize: "16px",
-              padding: "10px 20px",
-              borderRadius: "10px",
-              cursor: "pointer",
-              transition: "0.3s",
-            }}
-            onMouseEnter={(e) => (e.target.style.background = "lime")}
-            onMouseLeave={(e) => (e.target.style.background = "transparent")}
-          >
-            👤 Agent DB
-          </button>
-          <button
-            style={{
-              border: "2px solid lime",
-              background: "transparent",
-              color: "lime",
-              fontSize: "16px",
-              padding: "10px 20px",
-              borderRadius: "10px",
-              cursor: "pointer",
-              transition: "0.3s",
-            }}
-            onMouseEnter={(e) => (e.target.style.background = "lime")}
-            onMouseLeave={(e) => (e.target.style.background = "transparent")}
-          >
-            👥 Active Employers
-          </button>
-        </div>
-      </div>
-
-      {/* Right empty main area */}
-      <div style={{ flex: 1, backgroundColor: "#111" }}></div>
-    </div>
-  );
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard Buttons</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #111;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+    }
+    .button-container {
+      display: flex;
+      gap: 20px;
+    }
+    button {
+      border: 2px solid lime;
+      background: transparent;
+      color: lime;
+      font-size: 16px;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: lime;
+      color: black;
+    }
+    /* Icon styling */
+    .icon {
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="button-container">
+    <button>
+      <span class="icon">➕</span> Create Task
+    </button>
+    <button>
+      <span class="icon">📋</span> View Specs
+    </button>
+    <button>
+      <span class="icon">👤</span> Agent DB
+    </button>
+    <button>
+      <span class="icon">👥</span> Active Employers
+    </button>
+  </div>
+</body>
+</html>
