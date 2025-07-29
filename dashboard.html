@@ -3,88 +3,187 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AI FUTURE POWER | Compact Dashboard</title>
+  <title>AI FUTURE POWER | Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet" />
   <style>
-    body{margin:0;font-family:'Orbitron',monospace;background:#000;color:#0f0;font-size:13px;}
-    .dashboard{display:grid;grid-template-columns:150px 1fr;height:100vh;}
-    .sidebar{background:#111;padding:10px;border-right:1px solid #0f0;}
-    .sidebar button{width:100%;margin-bottom:8px;padding:6px;background:#000;border:1px solid #0f0;color:#0f0;border-radius:4px;cursor:pointer;transition:0.3s;}
-    .sidebar button:hover{background:#0f0;color:#000;}
-    .main{padding:10px 20px;overflow-y:auto;}
-    h1{font-size:18px;color:#0ff;margin:0 0 10px;}
-    .box{background:#111;padding:8px;border:1px solid #0f0;border-radius:6px;margin-bottom:8px;}
-    .box-title{font-size:14px;color:#00ffcc;margin-bottom:4px;}
-    .agent-photo{width:50px;height:50px;border-radius:50%;border:2px solid #0f0;margin-right:8px;}
-    .flex{display:flex;align-items:center;justify-content:space-between;}
-    .alerts{position:relative;height:60px;}
-    .alert-item{position:absolute;animation:scroll 8s infinite;white-space:nowrap;}
-    @keyframes scroll{0%{top:100%}50%{top:0;}100%{top:-100%;}}
+    body {
+      margin: 0;
+      font-family: 'Orbitron', monospace;
+      background-color: #000;
+      color: #0f0;
+      font-size: 13px;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      height: 100vh;
+    }
+
+    .sidebar {
+      background: #111;
+      padding: 10px;
+      border-right: 1px solid #0f0;
+    }
+
+    .main {
+      padding: 15px;
+      overflow-y: auto;
+    }
+
+    h1 {
+      color: #0ff;
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .action-box {
+      background: #111;
+      border: 1px solid #0f0;
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.3s;
+      font-size: 14px;
+    }
+
+    .action-box:hover {
+      background: #0f0;
+      color: #000;
+      box-shadow: 0 0 8px #0f0;
+    }
+
+    .box {
+      background: #111;
+      padding: 10px;
+      border: 1px solid #0f0;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+
+    .box h3 {
+      color: #00ffcc;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    #current-time {
+      font-weight: bold;
+    }
+
+    .alerts {
+      position: relative;
+      height: 50px;
+      overflow: hidden;
+    }
+
+    .alert-scroll {
+      position: absolute;
+      animation: scroll 8s linear infinite;
+      white-space: nowrap;
+    }
+
+    @keyframes scroll {
+      0% { top: 100%; }
+      50% { top: 0; }
+      100% { top: -100%; }
+    }
   </style>
 </head>
 <body>
+  <div class="dashboard">
+    <div class="sidebar">
+      <!-- Sidebar can stay empty or hold nav links -->
+    </div>
 
-<div class="dashboard">
-  <div class="sidebar">
-    <button onclick="openCreate()">➕ Create Task</button>
-    <button onclick="viewSpecs()">📋 View Specs</button>
-    <button onclick="agentDB()">👤 Agent DB</button>
-    <button onclick="activeEmployers()">👥 Active Employers</button>
-  </div>
+    <div class="main">
+      <h1>🧠 AI FUTURE POWER Terminal</h1>
 
-  <div class="main">
-    <h1>🧠 AI FUTURE POWER Terminal</h1>
-
-    <div class="box flex">
-      <div style="display:flex; align-items:center;">
-        <img src="https://img.freepik.com/free-photo/beautiful‑girl‑stands‑park_8353‑5084.jpg?w=360"
-             class="agent-photo" alt="Agent" />
-        <div><strong>Neo Cipher</strong><br>Tasks: 7</div>
+      <!-- Four Main Actions -->
+      <div class="actions">
+        <div class="action-box" onclick="createTask()">➕ Create Task</div>
+        <div class="action-box" onclick="viewSpecs()">📋 View Specs</div>
+        <div class="action-box" onclick="agentDB()">👤 Agent DB</div>
+        <div class="action-box" onclick="activeEmployers()">👥 Active Employers</div>
       </div>
-      <div id="current-time">--:--:--</div>
-    </div>
 
-    <div class="box">
-      <div class="box-title">👥 Active Employers</div>
-      <ul style="padding-left:15px;margin:0;">
-        <li>Memo – Designer</li>
-        <li>Sarah – Dealer</li>
-      </ul>
-    </div>
+      <!-- Agent Info -->
+      <div class="box">
+        <h3>👤 Agent Profile</h3>
+        <p>Name: <strong>Neo Cipher</strong></p>
+        <p>Tasks: <strong>7</strong></p>
+        <p>Current Time: <span id="current-time">--:--:--</span></p>
+      </div>
 
-    <div class="box alerts">
-      <div class="box-title">🚨 Live Alert</div>
-      <div id="news-container"></div>
+      <!-- Employers -->
+      <div class="box">
+        <h3>👥 Active Employers</h3>
+        <ul>
+          <li>Memo – Designer</li>
+          <li>Sarah – Dealer</li>
+        </ul>
+      </div>
+
+      <!-- Alerts -->
+      <div class="box">
+        <h3>🚨 Live Alerts</h3>
+        <div class="alerts">
+          <div id="news" class="alert-scroll">Loading news...</div>
+        </div>
+      </div>
     </div>
   </div>
-</div>
 
-<script>
-  function startClock(){
-    const el=document.getElementById('current-time');
-    setInterval(()=>{const d=new Date(); el.textContent=d.toLocaleTimeString();},1000);
-  }
-  window.onload=startClock;
+  <script>
+    function createTask() {
+      alert("🔧 Create Task modal triggered");
+    }
 
-  // Dummy news headlines for demo (replace with live fetch)
-  const news = [
-    'Global markets rally amid easing tensions',
-    'Tech giant announces new AI breakthrough',
-    'Energy prices hit record low this week'
-  ];
-  let idx=0;
-  setInterval(()=>{
-    const container=document.getElementById('news-container');
-    container.innerHTML='<div class="alert-item">'+news[idx]+'</div>';
-    idx=(idx+1)%news.length;
-  }, 4000);
+    function viewSpecs() {
+      alert("📋 Viewing saved specs...");
+    }
 
-  // Placeholder functions for buttons
-  function openCreate(){alert('Open Create Task modal');}
-  function viewSpecs(){alert('Show specifications');}
-  function agentDB(){alert('Open Agent Database');}
-  function activeEmployers(){alert('List active employers');}
-</script>
+    function agentDB() {
+      alert("👤 Opening Agent Database...");
+    }
 
+    function activeEmployers() {
+      alert("👥 Showing Active Employer List...");
+    }
+
+    function startClock() {
+      const el = document.getElementById("current-time");
+      setInterval(() => {
+        const now = new Date();
+        el.textContent = now.toLocaleTimeString();
+      }, 1000);
+    }
+
+    // Simulate Live News Feed
+    const headlines = [
+      "🌐 AI Breakthrough in Language Models!",
+      "📈 Markets Rally as AI Stocks Surge",
+      "🤖 New AI Chip Boosts Computing by 300%",
+      "⚠️ AI Ethics Debate Sparks in Tech World"
+    ];
+    let index = 0;
+    function rotateNews() {
+      const newsEl = document.getElementById("news");
+      newsEl.textContent = headlines[index];
+      index = (index + 1) % headlines.length;
+    }
+
+    startClock();
+    setInterval(rotateNews, 4000);
+    rotateNews();
+  </script>
 </body>
 </html>
