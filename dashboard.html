@@ -1,58 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dashboard Buttons</title>
-  <style>
-    body {
-      margin: 0;
-      background-color: #111;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      font-family: Arial, sans-serif;
-    }
-    .button-container {
-      display: flex;
-      gap: 20px;
-    }
-    button {
-      border: 2px solid lime;
-      background: transparent;
-      color: lime;
-      font-size: 16px;
-      padding: 10px 20px;
-      border-radius: 10px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: background-color 0.3s;
-    }
-    button:hover {
-      background-color: lime;
-      color: black;
-    }
-    /* Icon styling */
-    .icon {
-      font-size: 18px;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dashboard</title>
+<style>
+  body {
+    margin: 0;
+    background-color: #111;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+  }
+  .button-container {
+    display: flex;
+    gap: 20px;
+  }
+  button {
+    border: 2px solid lime;
+    background: transparent;
+    color: lime;
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s;
+  }
+  button:hover {
+    background-color: lime;
+    color: black;
+  }
+  .icon {
+    font-size: 18px;
+  }
+</style>
 </head>
 <body>
   <div class="button-container">
-    <button>
+    <button onclick="location.href='create-task.html'">
       <span class="icon">➕</span> Create Task
     </button>
-    <button>
+    <button onclick="location.href='view-specs.html'">
       <span class="icon">📋</span> View Specs
     </button>
-    <button>
+    <button onclick="location.href='agent-db.html'">
       <span class="icon">👤</span> Agent DB
     </button>
-    <button>
+    <button onclick="location.href='active-employers.html'">
       <span class="icon">👥</span> Active Employers
     </button>
   </div>
