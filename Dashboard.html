@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hacker Business Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Orbitron', monospace;
+      background-color: #000;
+      color: #0f0;
+    }
+    .dashboard {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      height: 100vh;
+    }
+    .sidebar {
+      background: #111;
+      padding: 1rem;
+      border-right: 1px solid #0f0;
+    }
+    .sidebar h2 {
+      margin-top: 0;
+    }
+    .sidebar button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      background: #000;
+      border: 1px solid #0f0;
+      color: #0f0;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .main {
+      padding: 2rem;
+      overflow-y: auto;
+    }
+    .main h1 {
+      margin-top: 0;
+    }
+    .card-dashboard {
+      background: #111;
+      padding: 1rem;
+      border: 1px solid #0f0;
+      margin-bottom: 1rem;
+      border-radius: 10px;
+    }
+    .modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+    .modal.active {
+      display: flex;
+    }
+    .modal-content {
+      background: #111;
+      padding: 2rem;
+      border: 1px solid #0f0;
+      border-radius: 10px;
+      width: 300px;
+    }
+    .modal-content input, .modal-content button {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 10px;
+      background: #000;
+      color: #0f0;
+      border: 1px solid #0f0;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard" id="dashboard">
+    <div class="sidebar">
+      <h2>Operations</h2>
+      <button onclick="openCreateProfileModal()">Create Profile</button>
+      <button onclick="viewSpecs()">View Specifications</button>
+      <button onclick="signOut()">Sign Out</button>
+    </div>
+    <div class="main">
+      <h1>Dashboard</h1>
+      <div class="card-dashboard" style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; align-items: center;">
+          <img src="https://img.freepik.com/free-photo/beautiful-girl-stands-park_8353-5084.jpg?w=360" alt="Agent Photo" style="width: 80px; height: 80px; border-radius: 50%; margin-right: 15px; border: 2px solid #0f0;" />
+          <div>
+            <h3 style="margin-bottom: 5px;">Agent Profile</h3>
+            <p>Name: <strong>Neo Cipher</strong></p>
+            <p>Active Tasks: <strong>7</strong></p>
+          </div>
+        </div>
+        <div style="text-align: right;">
+          <p><strong>Current Time:</strong></p>
+          <p style="font-size: 1.3rem;" id="current-time">--:--:--</p>
+        </div>
+      </div>
+      <div class="card-dashboard">
+        <h3>Active Employers</h3>
+        <ul>
+          <li>Memo – Graphic Designer</li>
+          <li>Sarah – Investment Dealer</li>
+        </ul>
+      </div>
+      <div class="card-dashboard">
+        <h3>Alerts</h3>
+        <p>No new alerts.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-create-profile">
+    <div class="modal-content">
+      <h3>Create Task</h3>
+      <input type="text" id="profile-name" placeholder="Client Name" />
+      <input type="text" id="profile-role" placeholder="Job Details" />
+      <input type="number" id="amount-collected" placeholder="Amount Collected" />
+      <input type="number" id="total-amount" placeholder="Total Amount" />
+      <button onclick="submitProfile()">Save</button>
+      <button onclick="closeCreateProfileModal()" style="margin-top:10px; background:#000; color:#0f0; border:1px solid #0f0;">Cancel</button>
+    </div>
+  </div>
+
+  <script>
+    let savedProfiles = [];
+
+    function openCreateProfileModal() {
+      document.getElementById('modal-create-profile').classList.add('active');
+    }
+
+    function closeCreateProfileModal() {
+      document.getElementById('modal-create-profile').classList.remove('active');
+    }
+
+    function submitProfile() {
+      const name = document.getElementById('profile-name').value.trim();
+      const role = document.getElementById('profile-role').value.trim();
+      const collected = document.getElementById('amount-collected').value.trim();
+      const total = document.getElementById('total-amount').value.trim();
+
+      if (!name || !role || !collected || !total) {
+        alert('Please fill in all fields.');
+        return;
+      }
+
+      savedProfiles.push({
+        client: name,
+        job: role,
+        collected: Number(collected),
+        total: Number(total)
+      });
+
+      alert('Task saved successfully!');
+      closeCreateProfileModal();
+    }
+
+    function viewSpecs() {
+      if (savedProfiles.length === 0) {
+        alert('No saved tasks found.');
+        return;
+      }
+
+      let specs = '--- Saved Profiles ---\n\n';
+      savedProfiles.forEach((p, i) => {
+        specs += `#${i + 1}\nClient: ${p.client}\nJob: ${p.job}\nCollected: $${p.collected}\nTotal: $${p.total}\n\n`;
+      });
+
+      alert(specs);
+    }
+
+    function signOut() {
+      window.location.href = "index.html";
+    }
+
+    function startClock() {
+      const timeEl = document.getElementById('current-time');
+      function updateTime() {
+        const now = new Date();
+        const h = String(now.getHours()).padStart(2, '0');
+        const m = String(now.getMinutes()).padStart(2, '0');
+        const s = String(now.getSeconds()).padStart(2, '0');
+         timeEl.textContent = `${h}:${m}:${s}`;
+      }
+      updateTime();
+      setInterval(updateTime, 1000);
+    }
+
+    // Start the clock when the page loads
+    window.onload = startClock;
+  </script>
+</body>
+</html>
