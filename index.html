@@ -2,54 +2,107 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Login | Hacker Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | AI FUTURE POWER</title>
   <style>
     body {
       background: black;
       color: #0f0;
-      font-family: monospace;
-      display: flex;
+      font-family: 'Courier New', Courier, monospace;
+      margin: 0;
+      padding: 0;
       height: 100vh;
+      overflow: hidden;
+      display: flex;
       align-items: center;
       justify-content: center;
+      flex-direction: column;
     }
+
+    .title {
+      font-size: 2rem;
+      color: #00ffcc;
+      margin-bottom: 2rem;
+      animation: glow 2s ease-in-out infinite alternate;
+      letter-spacing: 2px;
+    }
+
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 10px #0f0, 0 0 20px #00ffcc;
+      }
+      to {
+        text-shadow: 0 0 20px #0ff, 0 0 30px #00ffcc, 0 0 40px #00ffff;
+      }
+    }
+
     .login-box {
-      border: 1px solid #0f0;
+      border: 1px solid #00ffcc;
+      background: rgba(0, 255, 255, 0.05);
       padding: 2rem;
-      border-radius: 10px;
+      border-radius: 12px;
       text-align: center;
+      box-shadow: 0 0 15px #00ffff44;
+      width: 90%;
+      max-width: 400px;
     }
+
     input, button {
       margin-top: 1rem;
-      padding: 0.5rem;
+      padding: 0.8rem;
       width: 100%;
       background: #000;
       color: #0f0;
       border: 1px solid #0f0;
       border-radius: 5px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #00ffcc;
+      box-shadow: 0 0 10px #00ffccaa;
+    }
+
+    button:hover {
+      background: #0f0;
+      color: #000;
+      border-color: #0f0;
+      cursor: pointer;
+      box-shadow: 0 0 10px #0f0;
+    }
+
+    @media screen and (max-width: 480px) {
+      .title {
+        font-size: 1.5rem;
+      }
     }
   </style>
 </head>
 <body>
+
+  <div class="title">⚡ AI FUTURE POWER ⚡</div>
+
   <div class="login-box">
-    <h2>🛡️ ismail ACCESS</h2>
+    <h2>🔐 LOGIN ACCESS</h2>
     <input type="text" id="username" placeholder="Username" />
     <input type="password" id="password" placeholder="Password" />
-    <button onclick="login()">Login</button>
+    <button onclick="login()">ENTER TERMINAL</button>
   </div>
 
   <script>
     function login() {
-      const user = document.getElementById("username").value;
-      const pass = document.getElementById("password").value;
+      const user = document.getElementById("username").value.trim();
+      const pass = document.getElementById("password").value.trim();
 
       if (user === "123456789" && pass === "123456789") {
-        // Redirect to dashboard
         window.location.href = "dashboard.html";
       } else {
         alert("Incorrect credentials. Try again.");
       }
     }
   </script>
+
 </body>
 </html>
