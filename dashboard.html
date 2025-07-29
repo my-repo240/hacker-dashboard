@@ -3,52 +3,83 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Hacker Business Dashboard</title>
+  <title>AI FUTURE POWER | Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet" />
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: 'Orbitron', monospace;
       background-color: #000;
       color: #0f0;
+      font-size: 14px;
     }
+
     .dashboard {
       display: grid;
-      grid-template-columns: 200px 1fr;
+      grid-template-columns: 180px 1fr;
       height: 100vh;
     }
+
     .sidebar {
       background: #111;
       padding: 1rem;
       border-right: 1px solid #0f0;
     }
+
     .sidebar h2 {
-      margin-top: 0;
+      margin: 0 0 1rem;
+      font-size: 16px;
+      color: #0ff;
     }
+
     .sidebar button {
       width: 100%;
-      margin-top: 10px;
-      padding: 10px;
+      margin-bottom: 10px;
+      padding: 8px;
       background: #000;
       border: 1px solid #0f0;
       color: #0f0;
       border-radius: 5px;
+      font-size: 13px;
       cursor: pointer;
+      transition: 0.3s ease;
     }
+
+    .sidebar button:hover {
+      background: #0f0;
+      color: #000;
+      box-shadow: 0 0 5px #0f0;
+    }
+
     .main {
-      padding: 2rem;
+      padding: 1rem 2rem;
       overflow-y: auto;
     }
+
     .main h1 {
-      margin-top: 0;
+      margin: 0 0 1rem;
+      font-size: 20px;
+      color: #0ff;
     }
+
     .card-dashboard {
       background: #111;
       padding: 1rem;
       border: 1px solid #0f0;
       margin-bottom: 1rem;
-      border-radius: 10px;
+      border-radius: 8px;
     }
+
+    .card-dashboard h3 {
+      margin: 0 0 0.5rem;
+      font-size: 15px;
+      color: #00ffcc;
+    }
+
     .modal {
       position: fixed;
       top: 0; left: 0;
@@ -59,16 +90,19 @@
       align-items: center;
       z-index: 10;
     }
+
     .modal.active {
       display: flex;
     }
+
     .modal-content {
       background: #111;
-      padding: 2rem;
+      padding: 1.5rem;
       border: 1px solid #0f0;
       border-radius: 10px;
-      width: 300px;
+      width: 280px;
     }
+
     .modal-content input, .modal-content button {
       width: 100%;
       padding: 0.5rem;
@@ -77,42 +111,74 @@
       color: #0f0;
       border: 1px solid #0f0;
       border-radius: 5px;
+      font-size: 13px;
+    }
+
+    .modal-content button:hover {
+      background: #0f0;
+      color: #000;
+      box-shadow: 0 0 6px #0f0;
+    }
+
+    img.agent-photo {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 2px solid #0f0;
+      margin-right: 12px;
+    }
+
+    #current-time {
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+
+    ul {
+      padding-left: 1.2rem;
+      margin: 0;
+    }
+
+    li {
+      margin-bottom: 4px;
     }
   </style>
 </head>
 <body>
   <div class="dashboard" id="dashboard">
     <div class="sidebar">
-      <h2>Operations</h2>
-      <button onclick="openCreateProfileModal()">Create Profile</button>
-      <button onclick="viewSpecs()">View Specifications</button>
-      <button onclick="signOut()">Sign Out</button>
+      <h2>⚙️ Operations</h2>
+      <button onclick="openCreateProfileModal()">➕ Create Task</button>
+      <button onclick="viewSpecs()">📋 View Specs</button>
+      <button onclick="signOut()">🚪 Sign Out</button>
     </div>
+
     <div class="main">
-      <h1>Dashboard</h1>
+      <h1>🧠 AI FUTURE POWER - Terminal</h1>
+
       <div class="card-dashboard" style="display: flex; justify-content: space-between; align-items: center;">
         <div style="display: flex; align-items: center;">
-          <img src="https://img.freepik.com/free-photo/beautiful-girl-stands-park_8353-5084.jpg?w=360" alt="Agent Photo" style="width: 80px; height: 80px; border-radius: 50%; margin-right: 15px; border: 2px solid #0f0;" />
+          <img src="https://img.freepik.com/free-photo/beautiful-girl-stands-park_8353-5084.jpg?w=360" alt="Agent Photo" class="agent-photo" />
           <div>
-            <h3 style="margin-bottom: 5px;">Agent Profile</h3>
-            <p>Name: <strong>Neo Cipher</strong></p>
-            <p>Active Tasks: <strong>7</strong></p>
+            <strong>Neo Cipher</strong><br />
+            Tasks: <strong>7</strong>
           </div>
         </div>
         <div style="text-align: right;">
-          <p><strong>Current Time:</strong></p>
-          <p style="font-size: 1.3rem;" id="current-time">--:--:--</p>
+          <p style="margin: 0;">⏱ Current Time</p>
+          <p id="current-time">--:--:--</p>
         </div>
       </div>
+
       <div class="card-dashboard">
-        <h3>Active Employers</h3>
+        <h3>👔 Active Employers</h3>
         <ul>
           <li>Memo – Graphic Designer</li>
           <li>Sarah – Investment Dealer</li>
         </ul>
       </div>
+
       <div class="card-dashboard">
-        <h3>Alerts</h3>
+        <h3>🚨 Alerts</h3>
         <p>No new alerts.</p>
       </div>
     </div>
@@ -120,13 +186,13 @@
 
   <div class="modal" id="modal-create-profile">
     <div class="modal-content">
-      <h3>Create Task</h3>
+      <h3>📝 New Task</h3>
       <input type="text" id="profile-name" placeholder="Client Name" />
       <input type="text" id="profile-role" placeholder="Job Details" />
       <input type="number" id="amount-collected" placeholder="Amount Collected" />
       <input type="number" id="total-amount" placeholder="Total Amount" />
-      <button onclick="submitProfile()">Save</button>
-      <button onclick="closeCreateProfileModal()" style="margin-top:10px; background:#000; color:#0f0; border:1px solid #0f0;">Cancel</button>
+      <button onclick="submitProfile()">✅ Save</button>
+      <button onclick="closeCreateProfileModal()">❌ Cancel</button>
     </div>
   </div>
 
@@ -188,13 +254,12 @@
         const h = String(now.getHours()).padStart(2, '0');
         const m = String(now.getMinutes()).padStart(2, '0');
         const s = String(now.getSeconds()).padStart(2, '0');
-         timeEl.textContent = `${h}:${m}:${s}`;
+        timeEl.textContent = `${h}:${m}:${s}`;
       }
       updateTime();
       setInterval(updateTime, 1000);
     }
 
-    // Start the clock when the page loads
     window.onload = startClock;
   </script>
 </body>
