@@ -3,264 +3,88 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AI FUTURE POWER | Dashboard</title>
+  <title>AI FUTURE POWER | Compact Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet" />
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: 'Orbitron', monospace;
-      background-color: #000;
-      color: #0f0;
-      font-size: 14px;
-    }
-
-    .dashboard {
-      display: grid;
-      grid-template-columns: 180px 1fr;
-      height: 100vh;
-    }
-
-    .sidebar {
-      background: #111;
-      padding: 1rem;
-      border-right: 1px solid #0f0;
-    }
-
-    .sidebar h2 {
-      margin: 0 0 1rem;
-      font-size: 16px;
-      color: #0ff;
-    }
-
-    .sidebar button {
-      width: 100%;
-      margin-bottom: 10px;
-      padding: 8px;
-      background: #000;
-      border: 1px solid #0f0;
-      color: #0f0;
-      border-radius: 5px;
-      font-size: 13px;
-      cursor: pointer;
-      transition: 0.3s ease;
-    }
-
-    .sidebar button:hover {
-      background: #0f0;
-      color: #000;
-      box-shadow: 0 0 5px #0f0;
-    }
-
-    .main {
-      padding: 1rem 2rem;
-      overflow-y: auto;
-    }
-
-    .main h1 {
-      margin: 0 0 1rem;
-      font-size: 20px;
-      color: #0ff;
-    }
-
-    .card-dashboard {
-      background: #111;
-      padding: 1rem;
-      border: 1px solid #0f0;
-      margin-bottom: 1rem;
-      border-radius: 8px;
-    }
-
-    .card-dashboard h3 {
-      margin: 0 0 0.5rem;
-      font-size: 15px;
-      color: #00ffcc;
-    }
-
-    .modal {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.8);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 10;
-    }
-
-    .modal.active {
-      display: flex;
-    }
-
-    .modal-content {
-      background: #111;
-      padding: 1.5rem;
-      border: 1px solid #0f0;
-      border-radius: 10px;
-      width: 280px;
-    }
-
-    .modal-content input, .modal-content button {
-      width: 100%;
-      padding: 0.5rem;
-      margin-top: 10px;
-      background: #000;
-      color: #0f0;
-      border: 1px solid #0f0;
-      border-radius: 5px;
-      font-size: 13px;
-    }
-
-    .modal-content button:hover {
-      background: #0f0;
-      color: #000;
-      box-shadow: 0 0 6px #0f0;
-    }
-
-    img.agent-photo {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      border: 2px solid #0f0;
-      margin-right: 12px;
-    }
-
-    #current-time {
-      font-size: 1.1rem;
-      font-weight: bold;
-    }
-
-    ul {
-      padding-left: 1.2rem;
-      margin: 0;
-    }
-
-    li {
-      margin-bottom: 4px;
-    }
+    body{margin:0;font-family:'Orbitron',monospace;background:#000;color:#0f0;font-size:13px;}
+    .dashboard{display:grid;grid-template-columns:150px 1fr;height:100vh;}
+    .sidebar{background:#111;padding:10px;border-right:1px solid #0f0;}
+    .sidebar button{width:100%;margin-bottom:8px;padding:6px;background:#000;border:1px solid #0f0;color:#0f0;border-radius:4px;cursor:pointer;transition:0.3s;}
+    .sidebar button:hover{background:#0f0;color:#000;}
+    .main{padding:10px 20px;overflow-y:auto;}
+    h1{font-size:18px;color:#0ff;margin:0 0 10px;}
+    .box{background:#111;padding:8px;border:1px solid #0f0;border-radius:6px;margin-bottom:8px;}
+    .box-title{font-size:14px;color:#00ffcc;margin-bottom:4px;}
+    .agent-photo{width:50px;height:50px;border-radius:50%;border:2px solid #0f0;margin-right:8px;}
+    .flex{display:flex;align-items:center;justify-content:space-between;}
+    .alerts{position:relative;height:60px;}
+    .alert-item{position:absolute;animation:scroll 8s infinite;white-space:nowrap;}
+    @keyframes scroll{0%{top:100%}50%{top:0;}100%{top:-100%;}}
   </style>
 </head>
 <body>
-  <div class="dashboard" id="dashboard">
-    <div class="sidebar">
-      <h2>⚙️ Operations</h2>
-      <button onclick="openCreateProfileModal()">➕ Create Task</button>
-      <button onclick="viewSpecs()">📋 View Specs</button>
-      <button onclick="signOut()">🚪 Sign Out</button>
-    </div>
 
-    <div class="main">
-      <h1>🧠 AI FUTURE POWER - Terminal</h1>
-
-      <div class="card-dashboard" style="display: flex; justify-content: space-between; align-items: center;">
-        <div style="display: flex; align-items: center;">
-          <img src="https://img.freepik.com/free-photo/beautiful-girl-stands-park_8353-5084.jpg?w=360" alt="Agent Photo" class="agent-photo" />
-          <div>
-            <strong>Neo Cipher</strong><br />
-            Tasks: <strong>7</strong>
-          </div>
-        </div>
-        <div style="text-align: right;">
-          <p style="margin: 0;">⏱ Current Time</p>
-          <p id="current-time">--:--:--</p>
-        </div>
-      </div>
-
-      <div class="card-dashboard">
-        <h3>👔 Active Employers</h3>
-        <ul>
-          <li>Memo – Graphic Designer</li>
-          <li>Sarah – Investment Dealer</li>
-        </ul>
-      </div>
-
-      <div class="card-dashboard">
-        <h3>🚨 Alerts</h3>
-        <p>No new alerts.</p>
-      </div>
-    </div>
+<div class="dashboard">
+  <div class="sidebar">
+    <button onclick="openCreate()">➕ Create Task</button>
+    <button onclick="viewSpecs()">📋 View Specs</button>
+    <button onclick="agentDB()">👤 Agent DB</button>
+    <button onclick="activeEmployers()">👥 Active Employers</button>
   </div>
 
-  <div class="modal" id="modal-create-profile">
-    <div class="modal-content">
-      <h3>📝 New Task</h3>
-      <input type="text" id="profile-name" placeholder="Client Name" />
-      <input type="text" id="profile-role" placeholder="Job Details" />
-      <input type="number" id="amount-collected" placeholder="Amount Collected" />
-      <input type="number" id="total-amount" placeholder="Total Amount" />
-      <button onclick="submitProfile()">✅ Save</button>
-      <button onclick="closeCreateProfileModal()">❌ Cancel</button>
+  <div class="main">
+    <h1>🧠 AI FUTURE POWER Terminal</h1>
+
+    <div class="box flex">
+      <div style="display:flex; align-items:center;">
+        <img src="https://img.freepik.com/free-photo/beautiful‑girl‑stands‑park_8353‑5084.jpg?w=360"
+             class="agent-photo" alt="Agent" />
+        <div><strong>Neo Cipher</strong><br>Tasks: 7</div>
+      </div>
+      <div id="current-time">--:--:--</div>
+    </div>
+
+    <div class="box">
+      <div class="box-title">👥 Active Employers</div>
+      <ul style="padding-left:15px;margin:0;">
+        <li>Memo – Designer</li>
+        <li>Sarah – Dealer</li>
+      </ul>
+    </div>
+
+    <div class="box alerts">
+      <div class="box-title">🚨 Live Alert</div>
+      <div id="news-container"></div>
     </div>
   </div>
+</div>
 
-  <script>
-    let savedProfiles = [];
+<script>
+  function startClock(){
+    const el=document.getElementById('current-time');
+    setInterval(()=>{const d=new Date(); el.textContent=d.toLocaleTimeString();},1000);
+  }
+  window.onload=startClock;
 
-    function openCreateProfileModal() {
-      document.getElementById('modal-create-profile').classList.add('active');
-    }
+  // Dummy news headlines for demo (replace with live fetch)
+  const news = [
+    'Global markets rally amid easing tensions',
+    'Tech giant announces new AI breakthrough',
+    'Energy prices hit record low this week'
+  ];
+  let idx=0;
+  setInterval(()=>{
+    const container=document.getElementById('news-container');
+    container.innerHTML='<div class="alert-item">'+news[idx]+'</div>';
+    idx=(idx+1)%news.length;
+  }, 4000);
 
-    function closeCreateProfileModal() {
-      document.getElementById('modal-create-profile').classList.remove('active');
-    }
+  // Placeholder functions for buttons
+  function openCreate(){alert('Open Create Task modal');}
+  function viewSpecs(){alert('Show specifications');}
+  function agentDB(){alert('Open Agent Database');}
+  function activeEmployers(){alert('List active employers');}
+</script>
 
-    function submitProfile() {
-      const name = document.getElementById('profile-name').value.trim();
-      const role = document.getElementById('profile-role').value.trim();
-      const collected = document.getElementById('amount-collected').value.trim();
-      const total = document.getElementById('total-amount').value.trim();
-
-      if (!name || !role || !collected || !total) {
-        alert('Please fill in all fields.');
-        return;
-      }
-
-      savedProfiles.push({
-        client: name,
-        job: role,
-        collected: Number(collected),
-        total: Number(total)
-      });
-
-      alert('Task saved successfully!');
-      closeCreateProfileModal();
-    }
-
-    function viewSpecs() {
-      if (savedProfiles.length === 0) {
-        alert('No saved tasks found.');
-        return;
-      }
-
-      let specs = '--- Saved Profiles ---\n\n';
-      savedProfiles.forEach((p, i) => {
-        specs += `#${i + 1}\nClient: ${p.client}\nJob: ${p.job}\nCollected: $${p.collected}\nTotal: $${p.total}\n\n`;
-      });
-
-      alert(specs);
-    }
-
-    function signOut() {
-      window.location.href = "index.html";
-    }
-
-    function startClock() {
-      const timeEl = document.getElementById('current-time');
-      function updateTime() {
-        const now = new Date();
-        const h = String(now.getHours()).padStart(2, '0');
-        const m = String(now.getMinutes()).padStart(2, '0');
-        const s = String(now.getSeconds()).padStart(2, '0');
-        timeEl.textContent = `${h}:${m}:${s}`;
-      }
-      updateTime();
-      setInterval(updateTime, 1000);
-    }
-
-    window.onload = startClock;
-  </script>
 </body>
 </html>
