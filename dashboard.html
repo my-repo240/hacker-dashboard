@@ -17,74 +17,87 @@
       color: #0f0;
       font-size: 14px;
       overflow: hidden;
-    }
-
-    .dashboard {
-      display: grid;
-      grid-template-columns: 200px 1fr;
       height: 100vh;
+      display: flex;
     }
 
+    /* Left side menu */
     .sidebar {
+      width: 200px;
       background: #111;
       padding: 1rem;
-      border-right: 2px solid #0f0;
+      border-right: 3px solid #0f0;
       box-shadow: 2px 0 10px #0f0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
     .sidebar h2 {
       font-size: 16px;
       color: #0ff;
       margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .sidebar button {
-      display: block;
-      width: 100%;
-      margin-bottom: 10px;
-      padding: 10px;
+      padding: 12px;
       background: #000;
-      border: 1px solid #0f0;
+      border: 1.5px solid #0f0;
       color: #0f0;
-      border-radius: 5px;
-      font-size: 13px;
+      border-radius: 8px;
+      font-size: 14px;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
       transition: 0.3s;
     }
 
     .sidebar button:hover {
       background: #0f0;
       color: #000;
-      box-shadow: 0 0 8px #0f0;
+      box-shadow: 0 0 10px #0f0;
     }
 
+    /* Right side container for 4 boxes in a row */
     .main {
+      flex: 1;
       padding: 1rem;
       display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      overflow-y: auto;
+      gap: 15px;
+      overflow-x: auto;
+      align-items: stretch;
     }
 
     .card {
+      flex: 1 1 0;
       background: #111;
-      border: 1px solid #0f0;
-      border-radius: 8px;
+      border: 1.5px solid #0f0;
+      border-radius: 10px;
       padding: 1rem;
-      width: calc(50% - 1rem);
-      min-width: 260px;
-      position: relative;
+      min-width: 200px;
+      max-width: 250px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
     }
 
     .card h3 {
       margin-top: 0;
       color: #00ffcc;
-      font-size: 15px;
+      font-size: 16px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .agent-photo {
-      width: 50px;
-      height: 50px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
       border: 2px solid #0f0;
       margin-right: 10px;
@@ -93,162 +106,84 @@
     .agent-info {
       display: flex;
       align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      margin-bottom: 8px;
     }
 
     #current-time {
       font-weight: bold;
-      margin-top: 5px;
+      font-size: 14px;
+    }
+
+    ul {
+      padding-left: 1.2rem;
+      margin: 0;
+      color: #0f0;
+      font-size: 14px;
+    }
+
+    ul li {
+      margin-bottom: 6px;
     }
 
     #live-news {
-      font-size: 13px;
+      font-size: 14px;
       color: #0f0;
-      animation: scrollText 15s linear infinite;
       white-space: nowrap;
       overflow: hidden;
+      animation: scrollText 15s linear infinite;
+      align-self: center;
     }
 
     @keyframes scrollText {
       0% { transform: translateX(100%); }
       100% { transform: translateX(-100%); }
     }
-
-    .modal {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 10;
-    }
-
-    .modal.active {
-      display: flex;
-    }
-
-    .modal-content {
-      background: #111;
-      padding: 2rem;
-      border: 1px solid #0f0;
-      border-radius: 10px;
-      width: 300px;
-    }
-
-    .modal-content input, .modal-content button {
-      width: 100%;
-      padding: 0.5rem;
-      margin-top: 10px;
-      background: #000;
-      color: #0f0;
-      border: 1px solid #0f0;
-      border-radius: 5px;
-      font-size: 13px;
-    }
   </style>
 </head>
 <body>
-  <div class="dashboard">
-    <div class="sidebar">
-      <h2>⚙️ MENU</h2>
-      <button onclick="openCreateTask()">➕ Create Task</button>
-      <button onclick="viewSpecs()">📋 View Specs</button>
-      <button onclick="viewAgents()">👤 Agent DB</button>
-      <button onclick="viewEmployers()">👥 Active Employers</button>
-    </div>
-    <div class="main">
-      <div class="card">
-        <h3>👤 Agent Profile</h3>
-        <div class="agent-info">
-          <img src="https://img.freepik.com/free-photo/beautiful-girl-stands-park_8353-5084.jpg?w=360" class="agent-photo" />
-          <div>
-            Neo Cipher<br />
-            Tasks: <strong>7</strong><br />
-            <span id="current-time">--:--:--</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>👥 Active Employers</h3>
-        <ul>
-          <li>Memo – Graphic Designer</li>
-          <li>Sarah – Investment Dealer</li>
-        </ul>
-      </div>
-
-      <div class="card">
-        <h3>🚨 Live Alerts</h3>
-        <div id="live-news">🔊 Breaking: AI surpasses 99.99% logic efficiency in enterprise tasks.</div>
-      </div>
-
-      <div class="card">
-        <h3>📋 Task List</h3>
-        <div>No saved tasks yet.</div>
-      </div>
-    </div>
+  <div class="sidebar">
+    <h2><span>⚙️</span> MENU</h2>
+    <button onclick="openCreateTask()">➕ Create Task</button>
+    <button onclick="viewSpecs()">📋 View Specs</button>
+    <button onclick="viewAgents()">👤 Agent DB</button>
+    <button onclick="viewEmployers()">👥 Active Employers</button>
   </div>
 
-  <div class="modal" id="modal-task">
-    <div class="modal-content">
-      <h3>Create New Task</h3>
-      <input type="text" id="task-client" placeholder="Client Name">
-      <input type="text" id="task-role" placeholder="Job Detail">
-      <input type="number" id="task-collected" placeholder="Amount Collected">
-      <input type="number" id="task-total" placeholder="Total Amount">
-      <button onclick="saveTask()">Save</button>
-      <button onclick="closeCreateTask()">Cancel</button>
+  <div class="main">
+    <div class="card" id="agent-profile">
+      <h3>👤 Agent Profile</h3>
+      <div class="agent-info">
+        <img src="https://img.freepik.com/free-photo/beautiful-girl-stands-park_8353-5084.jpg?w=360" class="agent-photo" alt="Agent" />
+        <div>
+          <div>Neo Cipher</div>
+          <div>Tasks: 7</div>
+          <div id="current-time">--:--:--</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="active-employers">
+      <h3>👥 Active Employers</h3>
+      <ul>
+        <li>Memo – Graphic Designer</li>
+        <li>Sarah – Investment Dealer</li>
+      </ul>
+    </div>
+
+    <div class="card" id="live-alerts">
+      <h3>🚨 Live Alerts</h3>
+      <div id="live-news">🔊 Breaking: AI surpasses 99.99% logic efficiency in enterprise tasks.</div>
+    </div>
+
+    <div class="card" id="task-list">
+      <h3>📋 Task List</h3>
+      <div>No saved tasks yet.</div>
     </div>
   </div>
 
   <script>
-    const savedTasks = [];
-
-    function openCreateTask() {
-      document.getElementById("modal-task").classList.add("active");
-    }
-
-    function closeCreateTask() {
-      document.getElementById("modal-task").classList.remove("active");
-    }
-
-    function saveTask() {
-      const name = document.getElementById("task-client").value.trim();
-      const role = document.getElementById("task-role").value.trim();
-      const collected = parseFloat(document.getElementById("task-collected").value);
-      const total = parseFloat(document.getElementById("task-total").value);
-
-      if (!name || !role || isNaN(collected) || isNaN(total)) {
-        alert("Please fill in all fields.");
-        return;
-      }
-
-      savedTasks.push({ name, role, collected, total });
-      alert("Task Saved!");
-      closeCreateTask();
-    }
-
-    function viewSpecs() {
-      if (savedTasks.length === 0) {
-        alert("No saved tasks.");
-        return;
-      }
-      let msg = "";
-      savedTasks.forEach((task, index) => {
-        msg += `#${index + 1}\nClient: ${task.name}\nJob: ${task.role}\nCollected: $${task.collected}\nTotal: $${task.total}\n\n`;
-      });
-      alert(msg);
-    }
-
-    function viewAgents() {
-      alert("Agent DB\n\nNeo Cipher\nSkill: Data Infiltration\nTasks: 7\nStatus: Active");
-    }
-
-    function viewEmployers() {
-      alert("Active Employers\n\n1. Memo - Graphic Designer\n2. Sarah - Investment Dealer");
-    }
-
     function startClock() {
       const clock = document.getElementById("current-time");
       function update() {
@@ -258,8 +193,24 @@
       update();
       setInterval(update, 1000);
     }
-
     window.onload = startClock;
+
+    function openCreateTask() {
+      alert('Create Task clicked');
+      // Implement modal or functionality here
+    }
+    function viewSpecs() {
+      alert('View Specs clicked');
+      // Implement functionality here
+    }
+    function viewAgents() {
+      alert('Agent DB clicked');
+      // Implement functionality here
+    }
+    function viewEmployers() {
+      alert('Active Employers clicked');
+      // Implement functionality here
+    }
   </script>
 </body>
 </html>
