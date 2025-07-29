@@ -6,211 +6,71 @@
   <title>AI FUTURE POWER | Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet" />
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
       font-family: 'Orbitron', monospace;
-      background: linear-gradient(to bottom right, #000000, #1a1a1a);
+      background: linear-gradient(to bottom right, #000000, #111111);
       color: #0f0;
-      font-size: 14px;
-      overflow: hidden;
+      display: flex;
       height: 100vh;
-      display: flex;
+      overflow: hidden;
     }
-
-    /* Left side menu */
     .sidebar {
-      width: 200px;
+      width: 100%;
+      max-width: 450px;
       background: #111;
-      padding: 1rem;
       border-right: 3px solid #0f0;
-      box-shadow: 2px 0 10px #0f0;
+      box-shadow: 2px 0 12px #0f0;
+      padding: 20px 15px;
       display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .sidebar h2 {
-      font-size: 16px;
-      color: #0ff;
-      margin-bottom: 1rem;
-      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
       align-items: center;
-      gap: 8px;
+      gap: 20px;
+      box-sizing: border-box;
     }
-
+    .sidebar h2 {
+      color: #0ff;
+      margin: 0 15px 0 0;
+      font-size: 20px;
+      white-space: nowrap;
+    }
     .sidebar button {
-      padding: 12px;
-      background: #000;
-      border: 1.5px solid #0f0;
+      background: transparent;
+      border: 2px solid #0f0;
       color: #0f0;
-      border-radius: 8px;
-      font-size: 14px;
+      font-size: 16px;
+      padding: 14px 18px;
+      border-radius: 10px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
-      transition: 0.3s;
+      gap: 8px;
+      transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+      white-space: nowrap;
     }
-
     .sidebar button:hover {
       background: #0f0;
       color: #000;
-      box-shadow: 0 0 10px #0f0;
+      box-shadow: 0 0 15px #0f0;
     }
-
-    /* Right side container for 4 boxes in a row */
-    .main {
+    .content {
       flex: 1;
-      padding: 1rem;
-      display: flex;
-      gap: 15px;
-      overflow-x: auto;
-      align-items: stretch;
-    }
-
-    .card {
-      flex: 1 1 0;
       background: #111;
-      border: 1.5px solid #0f0;
-      border-radius: 10px;
-      padding: 1rem;
-      min-width: 200px;
-      max-width: 250px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-    }
-
-    .card h3 {
-      margin-top: 0;
-      color: #00ffcc;
-      font-size: 16px;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .agent-photo {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      border: 2px solid #0f0;
-      margin-right: 10px;
-    }
-
-    .agent-info {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 14px;
-      margin-bottom: 8px;
-    }
-
-    #current-time {
-      font-weight: bold;
-      font-size: 14px;
-    }
-
-    ul {
-      padding-left: 1.2rem;
-      margin: 0;
-      color: #0f0;
-      font-size: 14px;
-    }
-
-    ul li {
-      margin-bottom: 6px;
-    }
-
-    #live-news {
-      font-size: 14px;
-      color: #0f0;
-      white-space: nowrap;
-      overflow: hidden;
-      animation: scrollText 15s linear infinite;
-      align-self: center;
-    }
-
-    @keyframes scrollText {
-      0% { transform: translateX(100%); }
-      100% { transform: translateX(-100%); }
+      border-left: 3px solid #0f0;
     }
   </style>
 </head>
 <body>
   <div class="sidebar">
-    <h2><span>⚙️</span> MENU</h2>
-    <button onclick="openCreateTask()">➕ Create Task</button>
-    <button onclick="viewSpecs()">📋 View Specs</button>
-    <button onclick="viewAgents()">👤 Agent DB</button>
-    <button onclick="viewEmployers()">👥 Active Employers</button>
+    <h2>⚙️ MENU</h2>
+    <button>➕ Create Task</button>
+    <button>📋 View Specs</button>
+    <button>👤 Agent DB</button>
+    <button>👥 Active Employers</button>
   </div>
-
-  <div class="main">
-    <div class="card" id="agent-profile">
-      <h3>👤 Agent Profile</h3>
-      <div class="agent-info">
-        <img src="https://img.freepik.com/free-photo/beautiful-girl-stands-park_8353-5084.jpg?w=360" class="agent-photo" alt="Agent" />
-        <div>
-          <div>Neo Cipher</div>
-          <div>Tasks: 7</div>
-          <div id="current-time">--:--:--</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card" id="active-employers">
-      <h3>👥 Active Employers</h3>
-      <ul>
-        <li>Memo – Graphic Designer</li>
-        <li>Sarah – Investment Dealer</li>
-      </ul>
-    </div>
-
-    <div class="card" id="live-alerts">
-      <h3>🚨 Live Alerts</h3>
-      <div id="live-news">🔊 Breaking: AI surpasses 99.99% logic efficiency in enterprise tasks.</div>
-    </div>
-
-    <div class="card" id="task-list">
-      <h3>📋 Task List</h3>
-      <div>No saved tasks yet.</div>
-    </div>
+  <div class="content">
+    <!-- Empty right side -->
   </div>
-
-  <script>
-    function startClock() {
-      const clock = document.getElementById("current-time");
-      function update() {
-        const now = new Date();
-        clock.textContent = now.toLocaleTimeString();
-      }
-      update();
-      setInterval(update, 1000);
-    }
-    window.onload = startClock;
-
-    function openCreateTask() {
-      alert('Create Task clicked');
-      // Implement modal or functionality here
-    }
-    function viewSpecs() {
-      alert('View Specs clicked');
-      // Implement functionality here
-    }
-    function viewAgents() {
-      alert('Agent DB clicked');
-      // Implement functionality here
-    }
-    function viewEmployers() {
-      alert('Active Employers clicked');
-      // Implement functionality here
-    }
-  </script>
 </body>
 </html>
