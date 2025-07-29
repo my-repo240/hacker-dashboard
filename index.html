@@ -4,19 +4,51 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login | AI FUTURE POWER</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
-      background: black;
-      color: #0f0;
-      font-family: 'Courier New', Courier, monospace;
+      font-family: 'Montserrat', sans-serif;
       margin: 0;
       padding: 0;
       height: 100vh;
       overflow: hidden;
+      background: black;
+      color: #0f0;
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-direction: column;
+      position: relative;
+    }
+
+    .split-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      z-index: 0;
+    }
+
+    .left-side, .right-side {
+      flex: 1;
+      background-size: cover;
+      background-position: center;
+      opacity: 0.1;
+    }
+
+    .left-side {
+      background-image: url('https://i.imgur.com/ZmYrV1j.jpg'); /* Designer image */
+    }
+
+    .right-side {
+      background-image: url('https://i.imgur.com/Ns9bq0D.jpg'); /* Coder image */
     }
 
     .title {
@@ -25,6 +57,9 @@
       margin-bottom: 2rem;
       animation: glow 2s ease-in-out infinite alternate;
       letter-spacing: 2px;
+      position: relative;
+      z-index: 2;
+      text-align: center;
     }
 
     @keyframes glow {
@@ -45,6 +80,8 @@
       box-shadow: 0 0 15px #00ffff44;
       width: 90%;
       max-width: 400px;
+      position: relative;
+      z-index: 2;
     }
 
     input, button {
@@ -73,7 +110,15 @@
       box-shadow: 0 0 10px #0f0;
     }
 
-    @media screen and (max-width: 480px) {
+    @media screen and (max-width: 768px) {
+      .split-bg {
+        flex-direction: column;
+      }
+
+      .left-side, .right-side {
+        height: 50%;
+      }
+
       .title {
         font-size: 1.5rem;
       }
@@ -81,6 +126,11 @@
   </style>
 </head>
 <body>
+
+  <div class="split-bg">
+    <div class="left-side"></div>
+    <div class="right-side"></div>
+  </div>
 
   <div class="title">⚡ AI FUTURE POWER ⚡</div>
 
