@@ -6,133 +6,56 @@
   <title>AI FUTURE POWER | Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet" />
   <style>
-    body {
-      margin: 0;
-      font-family: 'Orbitron', monospace;
-      background-color: #000;
-      color: #0f0;
-      font-size: 13px;
-    }
-
-    .dashboard {
-      display: grid;
-      grid-template-columns: 180px 1fr;
-      height: 100vh;
-    }
-
-    .sidebar {
-      background: #111;
-      padding: 10px;
-      border-right: 1px solid #0f0;
-    }
-
-    .main {
-      padding: 15px;
-      overflow-y: auto;
-    }
-
-    h1 {
-      color: #0ff;
-      font-size: 18px;
-      margin-bottom: 15px;
-    }
-
-    .actions {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-
-    .action-box {
-      background: #111;
-      border: 1px solid #0f0;
-      padding: 12px;
-      border-radius: 8px;
-      text-align: center;
-      cursor: pointer;
-      transition: 0.3s;
-      font-size: 14px;
-    }
-
-    .action-box:hover {
-      background: #0f0;
-      color: #000;
-      box-shadow: 0 0 8px #0f0;
-    }
-
-    .box {
-      background: #111;
-      padding: 10px;
-      border: 1px solid #0f0;
-      border-radius: 6px;
-      margin-bottom: 12px;
-    }
-
-    .box h3 {
-      color: #00ffcc;
-      font-size: 14px;
-      margin-bottom: 8px;
-    }
-
-    #current-time {
-      font-weight: bold;
-    }
-
-    .alerts {
-      position: relative;
-      height: 50px;
-      overflow: hidden;
-    }
-
-    .alert-scroll {
-      position: absolute;
-      animation: scroll 8s linear infinite;
-      white-space: nowrap;
-    }
-
-    @keyframes scroll {
-      0% { top: 100%; }
-      50% { top: 0; }
-      100% { top: -100%; }
-    }
+    * {box-sizing: border-box;}
+    body { margin: 0; font-family: 'Orbitron', monospace; background: #000; color: #0f0; font-size: 13px; }
+    .dashboard { display: grid; grid-template-columns: 150px 1fr; height: 100vh; }
+    .sidebar { background: #111; padding: 10px; border-right: 1px solid #0f0; }
+    .main { padding: 15px; overflow-y: auto; }
+    h1 { color: #0ff; font-size: 18px; margin-bottom: 15px; }
+    .actions { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px,1fr)); gap: 12px; margin-bottom: 20px; }
+    .action-box { background: #111; border: 1px solid #0f0; padding: 10px; border-radius: 6px; text-align: center; cursor: pointer; transition: .3s; }
+    .action-box:hover { background: #0f0; color: #000; box-shadow: 0 0 6px #0f0; }
+    .box { background: #111; padding: 10px; border: 1px solid #0f0; border-radius: 6px; margin-bottom: 12px; }
+    .box h3 { color: #00ffcc; font-size: 14px; margin-bottom: 8px; }
+    #current-time { font-weight: bold; }
+    .alerts { position: relative; height: 50px; overflow: hidden; }
+    .alert-scroll { position: absolute; animation: scroll 8s linear infinite; white-space: nowrap; }
+    @keyframes scroll { 0%{ top: 100%; } 50%{ top: 0; } 100%{ top: -100%; } }
+    .modal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); display:none; justify-content:center; align-items:center; z-index:20; }
+    .modal.active { display:flex; }
+    .modal-content { background:#111; padding:20px; border:1px solid #0f0; border-radius:8px; width:300px; max-height:90%; overflow-y:auto; }
+    .modal-content h2 { color:#0ff; margin-top:0; font-size:16px; }
+    .modal-content input, .modal-content select, .modal-content button { width:100%; margin-top:8px; padding:8px; background:#000; color:#0f0; border:1px solid #0f0; border-radius:5px; font-size:14px; }
+    .modal-content button:hover { background:#0f0; color:#000; cursor:pointer; }
+    .modal-content .small { font-size:12px; margin-top:4px; color:#0ff; }
+    ul { padding-left:15px; margin:0; }
+    li { margin-bottom:4px; }
   </style>
 </head>
 <body>
   <div class="dashboard">
-    <div class="sidebar">
-      <!-- Sidebar can stay empty or hold nav links -->
-    </div>
-
+    <div class="sidebar"></div>
     <div class="main">
       <h1>🧠 AI FUTURE POWER Terminal</h1>
-
-      <!-- Four Main Actions -->
       <div class="actions">
-        <div class="action-box" onclick="createTask()">➕ Create Task</div>
-        <div class="action-box" onclick="viewSpecs()">📋 View Specs</div>
-        <div class="action-box" onclick="agentDB()">👤 Agent DB</div>
-        <div class="action-box" onclick="activeEmployers()">👥 Active Employers</div>
+        <div class="action-box" onclick="openModal('task')">➕ Create Task</div>
+        <div class="action-box" onclick="openModal('specs')">📋 View Specs</div>
+        <div class="action-box" onclick="openModal('agent')">👤 Agent DB</div>
+        <div class="action-box" onclick="openModal('employers')">👥 Active Employers</div>
       </div>
 
-      <!-- Agent Info -->
       <div class="box">
         <h3>👤 Agent Profile</h3>
-        <p>Name: <strong>Neo Cipher</strong></p>
-        <p>Tasks: <strong>7</strong></p>
-        <p>Current Time: <span id="current-time">--:--:--</span></p>
+        <p>Name: <strong id="agent-name">Neo Cipher</strong></p>
+        <p>Tasks: <strong id="agent-count">0</strong></p>
+        <p>Time: <span id="current-time">--:--:--</span></p>
       </div>
 
-      <!-- Employers -->
       <div class="box">
         <h3>👥 Active Employers</h3>
-        <ul>
-          <li>Memo – Designer</li>
-          <li>Sarah – Dealer</li>
-        </ul>
+        <ul id="employers-list"></ul>
       </div>
 
-      <!-- Alerts -->
       <div class="box">
         <h3>🚨 Live Alerts</h3>
         <div class="alerts">
@@ -142,48 +65,151 @@
     </div>
   </div>
 
-  <script>
-    function createTask() {
-      alert("🔧 Create Task modal triggered");
-    }
+  <!-- Modals -->
+  <div id="modal-task" class="modal">
+    <div class="modal-content">
+      <h2>Create Task</h2>
+      <input type="text" id="task-client" placeholder="Client Name">
+      <input type="text" id="task-job" placeholder="Job Description">
+      <input type="number" id="task-collected" placeholder="Amount Collected">
+      <input type="number" id="task-total" placeholder="Total Amount">
+      <button onclick="saveTask()">Save Task</button>
+      <button onclick="closeModal('task')">Cancel</button>
+    </div>
+  </div>
 
-    function viewSpecs() {
-      alert("📋 Viewing saved specs...");
-    }
+  <div id="modal-specs" class="modal">
+    <div class="modal-content">
+      <h2>Saved Specifications</h2>
+      <pre id="specs-list" style="white-space: pre-wrap; color:#0f0;"></pre>
+      <button onclick="closeModal('specs')">Close</button>
+    </div>
+  </div>
 
-    function agentDB() {
-      alert("👤 Opening Agent Database...");
-    }
+  <div id="modal-agent" class="modal">
+    <div class="modal-content">
+      <h2>Agent DB</h2>
+      <label>Name</label>
+      <input id="agent-input-name" placeholder="Agent Name">
+      <button onclick="saveAgent()">Save Agent</button>
+      <p class="small">Name persists in LocalStorage.</p>
+      <button onclick="closeModal('agent')">Close</button>
+    </div>
+  </div>
 
-    function activeEmployers() {
-      alert("👥 Showing Active Employer List...");
-    }
+  <div id="modal-employers" class="modal">
+    <div class="modal-content">
+      <h2>Active Employers</h2>
+      <input id="employer-input" placeholder="Employer Name">
+      <button onclick="addEmployer()">Add Employer</button>
+      <ul id="modal-employers-list"></ul>
+      <button onclick="closeModal('employers')">Close</button>
+    </div>
+  </div>
 
-    function startClock() {
-      const el = document.getElementById("current-time");
-      setInterval(() => {
-        const now = new Date();
-        el.textContent = now.toLocaleTimeString();
-      }, 1000);
-    }
+<script>
+  // Clock
+  function startClock() {
+    const el = document.getElementById('current-time');
+    setInterval(() => el.textContent = new Date().toLocaleTimeString(), 1000);
+  }
 
-    // Simulate Live News Feed
-    const headlines = [
-      "🌐 AI Breakthrough in Language Models!",
-      "📈 Markets Rally as AI Stocks Surge",
-      "🤖 New AI Chip Boosts Computing by 300%",
-      "⚠️ AI Ethics Debate Sparks in Tech World"
-    ];
-    let index = 0;
-    function rotateNews() {
-      const newsEl = document.getElementById("news");
-      newsEl.textContent = headlines[index];
-      index = (index + 1) % headlines.length;
-    }
+  // Modal control
+  function openModal(id) { document.getElementById(`modal-${id}`).classList.add('active'); }
+  function closeModal(id) { document.getElementById(`modal-${id}`).classList.remove('active'); }
 
+  // Tasks storage
+  function loadTasks() {
+    return JSON.parse(localStorage.getItem('tasks')||'[]');
+  }
+  function saveTask() {
+    const c = document.getElementById('task-client').value.trim();
+    const j = document.getElementById('task-job').value.trim();
+    const co = document.getElementById('task-collected').value;
+    const to = document.getElementById('task-total').value;
+    if (!c||!j||!co||!to) return alert('Fill all fields');
+    const t = {client:c,job:j,collected:co,total:to};
+    const arr = loadTasks();
+    arr.push(t);
+    localStorage.setItem('tasks', JSON.stringify(arr));
+    alert('Task saved');
+    document.getElementById('task-client').value='';
+    closeModal('task');
+    updateAgentCount();
+  }
+
+  function viewSpecs() {
+    const arr = loadTasks();
+    if (!arr.length) document.getElementById('specs-list').textContent = 'No tasks yet';
+    else {
+      const txt = arr.map((t,i)=>`#${i+1}\nClient: ${t.client}\nJob: ${t.job}\nCollected: $${t.collected}\nTotal: $${t.total}\n`).join('\n');
+      document.getElementById('specs-list').textContent = txt;
+    }
+    openModal('specs');
+  }
+
+  function updateAgentCount(){
+    document.getElementById('agent-count').textContent = loadTasks().length;
+  }
+
+  // Agent DB
+  function loadAgent() {
+    return localStorage.getItem('agentName')||'Neo Cipher';
+  }
+  function saveAgent() {
+    const name = document.getElementById('agent-input-name').value.trim();
+    if (!name) return alert('Enter a name');
+    localStorage.setItem('agentName', name);
+    document.getElementById('agent-name').textContent = name;
+    closeModal('agent');
+  }
+
+  // Employers DB
+  function loadEmployers() {
+    return JSON.parse(localStorage.getItem('employers')||'[]');
+  }
+  function renderEmployers(){
+    const list = loadEmployers();
+    const container = document.getElementById('employers-list');
+    container.innerHTML = '';
+    list.forEach(e=>{ const li=document.createElement('li'); li.textContent=e; container.appendChild(li); });
+    const modalUL = document.getElementById('modal-employers-list');
+    modalUL.innerHTML = '';
+    list.forEach(e=>{ const li2=document.createElement('li'); li2.textContent=e; modalUL.appendChild(li2); });
+  }
+  function addEmployer(){
+    const name = document.getElementById('employer-input').value.trim();
+    if (!name) return;
+    const arr = loadEmployers();
+    arr.push(name);
+    localStorage.setItem('employers', JSON.stringify(arr));
+    document.getElementById('employer-input').value='';
+    renderEmployers();
+  }
+
+  // Live news
+  const headlines = [
+    "🌐 AI Breakthrough in Language Models!",
+    "📈 Markets Rally as AI Stocks Surge",
+    "🤖 New AI Chip Boosts Computing by 300%",
+    "⚠️ AI Ethics Debate Sparks in Tech World"
+  ];
+  let idx=0;
+  function rotateNews(){
+    const el = document.getElementById('news');
+    el.textContent = headlines[idx];
+    idx = (idx+1)%headlines.length;
+  }
+
+  // Init
+  window.onload = function(){
     startClock();
-    setInterval(rotateNews, 4000);
+    updateAgentCount();
+    document.getElementById('agent-name').textContent = loadAgent();
+    renderEmployers();
     rotateNews();
-  </script>
+    setInterval(rotateNews, 4000);
+  };
+</script>
 </body>
 </html>
