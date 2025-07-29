@@ -3,133 +3,154 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dashboard</title>
+  <title>AI FUTURE POWER Dashboard</title>
   <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      margin: 0;
-      background-color: #111;
-      color: lime;
-      font-family: Arial, sans-serif;
-    }
-    .center-container {
+      background: radial-gradient(circle at center, #001414, #000000);
+      color: #0f0;
+      font-family: monospace;
+      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding-top: 100px;
-      flex-direction: column;
     }
-    .button-container {
+    .container {
+      width: 90%;
+      max-width: 800px;
+    }
+    .buttons {
       display: flex;
       gap: 20px;
-      margin-bottom: 30px;
+      justify-content: center;
+      margin-bottom: 40px;
     }
     button {
-      border: 2px solid lime;
+      border: 2px solid #0f0;
       background: transparent;
-      color: lime;
+      color: #0f0;
       font-size: 16px;
       padding: 10px 20px;
-      border-radius: 10px;
+      border-radius: 8px;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: background 0.3s;
     }
     button:hover {
-      background-color: lime;
-      color: black;
+      background: #0f0;
+      color: #000;
     }
-
     .view {
       display: none;
+      background: rgba(0, 32, 32, 0.6);
+      border: 1px solid #0f0;
       padding: 20px;
-      border: 1px solid lime;
-      width: 50%;
-      background-color: #222;
-      border-radius: 10px;
+      border-radius: 8px;
     }
-
-    .view.active {
+    .view.active { display: block; }
+    label {
+      font-size: 14px;
+      margin-top: 10px;
       display: block;
     }
-
     input, textarea {
       width: 100%;
-      padding: 8px;
       margin-top: 5px;
       margin-bottom: 15px;
+      background: #002222;
+      border: 1px solid #0f0;
+      color: #0f0;
+      padding: 8px;
       border-radius: 5px;
-      border: none;
     }
-
-    label {
-      font-weight: bold;
-      display: block;
-    }
-
     .back-btn {
       margin-top: 10px;
-      background-color: lime;
-      color: black;
+      background: #0f0;
+      color: #000;
       font-weight: bold;
+    }
+    pre {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-size: 14px;
+      line-height: 1.4;
     }
   </style>
 </head>
 <body>
-  <div class="center-container">
-    <div class="button-container">
-      <button onclick="showView('createTask')">➕ Create Task</button>
-      <button onclick="showView('viewSpecs')">📋 View Specs</button>
-      <button onclick="showView('agentDB')">👤 Agent DB</button>
-      <button onclick="showView('activeEmployers')">👥 Active Employers</button>
+  <div class="container">
+    <div class="buttons">
+      <button onclick="showView('create')">➕ Create Task</button>
+      <button onclick="showView('specs')">📋 View Specs</button>
     </div>
 
-    <!-- CREATE TASK -->
-    <div id="createTask" class="view">
+    <div id="create" class="view">
       <h2>Create Task</h2>
       <label>Client Name:</label>
-      <input type="text" />
-      <label>Client Amount:</label>
-      <input type="number" />
+      <input id="clientName" type="text" required />
+      <label>Amount:</label>
+      <input id="clientAmount" type="number" required />
       <label>Work Details:</label>
-      <textarea></textarea>
-      <label><input type="checkbox" /> Full Payment Received</label>
-      <br />
-      <button>Submit</button>
+      <textarea id="workDetails"></textarea>
+      <label><input id="fullPayment" type="checkbox" /> Full Payment Received</label>
+      <button onclick="submitTask()">Submit</button>
       <button class="back-btn" onclick="goBack()">← Back</button>
     </div>
 
-    <!-- VIEW SPECS -->
-    <div id="viewSpecs" class="view">
-      <h2>Specs Info</h2>
-      <p>Details of work specifications go here...</p>
-      <button class="back-btn" onclick="goBack()">← Back</button>
-    </div>
-
-    <!-- AGENT DB -->
-    <div id="agentDB" class="view">
-      <h2>Agent Database</h2>
-      <p>Agent-related information and records.</p>
-      <button class="back-btn" onclick="goBack()">← Back</button>
-    </div>
-
-    <!-- ACTIVE EMPLOYERS -->
-    <div id="activeEmployers" class="view">
-      <h2>Active Employers</h2>
-      <p>List of active employers...</p>
+    <div id="specs" class="view">
+      <h2>Saved Tasks</h2>
+      <pre id="specsList">No tasks saved.</pre>
       <button class="back-btn" onclick="goBack()">← Back</button>
     </div>
   </div>
 
   <script>
-    function showView(viewId) {
+    let tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+
+    function showView(id) {
       document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-      document.getElementById(viewId).classList.add('active');
-      document.querySelector('.button-container').style.display = 'none';
+      document.getElementById(id).classList.add('active');
+      document.querySelector('.buttons').style.display = 'none';
+      if (id === 'specs') {
+        renderSpecs();
+      }
     }
 
     function goBack() {
       document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-      document.querySelector('.button-container').style.display = 'flex';
+      document.querySelector('.buttons').style.display = 'flex';
     }
+
+    function submitTask() {
+      const client = document.getElementById('clientName').value.trim();
+      const amount = document.getElementById('clientAmount').value.trim();
+      const details = document.getElementById('workDetails').value.trim();
+      const paid = document.getElementById('fullPayment').checked;
+      if (!client || !amount || !details) {
+        alert('Please complete all fields.');
+        return;
+      }
+      tasks.push({ client, amount, details, paid });
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+      alert('Task saved successfully!');
+      goBack();
+    }
+
+    function renderSpecs() {
+      if (!tasks.length) {
+        document.getElementById('specsList').textContent = 'No tasks saved.';
+        return;
+      }
+      const text = tasks.map((t,i) => 
+        `#${i+1}
+ Client: ${t.client}
+ Amount: $${t.amount}
+ Details: ${t.details}
+ Full Payment: ${t.paid ? '✅ Yes' : '❌ No'}\n`
+      ).join('\n');
+      document.getElementById('specsList').textContent = text;
+    }
+
+    window.onload = () => { showView(''); };
   </script>
 </body>
 </html>
