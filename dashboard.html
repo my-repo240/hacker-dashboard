@@ -7,73 +7,66 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background: radial-gradient(circle at center, #001414, #000000);
-      color: #0f0;
       font-family: monospace;
       height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      background: url('https://i.imgur.com/3ZQ3T6x.jpg') center/cover no-repeat;
+      position: relative;
+      overflow: hidden;
+      color: #0f0;
+    }
+    /* Animated overlay */
+    body::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 32, 32, 0.6);
+      animation: pulse 8s ease-in-out infinite;
+      z-index: 0;
+    }
+    @keyframes pulse {
+      0%,100% { background: rgba(0,32,32,0.6); }
+      50% { background: rgba(0,48,48,0.4); }
     }
     .container {
-      width: 90%;
-      max-width: 800px;
+      position: relative; z-index: 1;
+      width: 90%; max-width: 900px;
+      margin: auto;
+      padding-top: 60px;
     }
     .buttons {
       display: flex;
-      gap: 20px;
+      gap: 15px;
+      flex-wrap: wrap;
       justify-content: center;
       margin-bottom: 40px;
     }
     button {
-      border: 2px solid #0f0;
       background: transparent;
+      border: 2px solid #0f0;
       color: #0f0;
       font-size: 16px;
-      padding: 10px 20px;
+      padding: 10px 18px;
       border-radius: 8px;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: background 0.3s, box-shadow 0.3s;
     }
     button:hover {
       background: #0f0;
       color: #000;
+      box-shadow: 0 0 8px #0f0;
     }
     .view {
       display: none;
-      background: rgba(0, 32, 32, 0.6);
+      background: rgba(0, 0, 0, 0.7);
       border: 1px solid #0f0;
       padding: 20px;
       border-radius: 8px;
     }
     .view.active { display: block; }
-    label {
-      font-size: 14px;
-      margin-top: 10px;
-      display: block;
-    }
-    input, textarea {
-      width: 100%;
-      margin-top: 5px;
-      margin-bottom: 15px;
-      background: #002222;
-      border: 1px solid #0f0;
-      color: #0f0;
-      padding: 8px;
-      border-radius: 5px;
-    }
-    .back-btn {
-      margin-top: 10px;
-      background: #0f0;
-      color: #000;
-      font-weight: bold;
-    }
-    pre {
-      white-space: pre-wrap;
-      word-wrap: break-word;
-      font-size: 14px;
-      line-height: 1.4;
-    }
+    label { display: block; margin-top: 10px; }
+    input, textarea { width: 100%; margin-top: 5px; margin-bottom: 15px; padding: 8px; border-radius: 5px; background: #002222; color: #0f0; border: 1px solid #0f0; }
+    textarea { resize: vertical; }
+    .back-btn { margin-top: 10px; background: #0f0; color: #000; border: none; cursor: pointer; }
+    pre { white-space: pre-wrap; word-break: break-word; font-size: 14px; line-height: 1.4; }
   </style>
 </head>
 <body>
@@ -81,76 +74,85 @@
     <div class="buttons">
       <button onclick="showView('create')">➕ Create Task</button>
       <button onclick="showView('specs')">📋 View Specs</button>
+      <button onclick="showView('leads')">🧭 Leads Section</button>
+      <button onclick="showView('updates')">📥 Updates Inbox</button>
     </div>
 
+    <!-- Create Task -->
     <div id="create" class="view">
       <h2>Create Task</h2>
-      <label>Client Name:</label>
-      <input id="clientName" type="text" required />
-      <label>Amount:</label>
-      <input id="clientAmount" type="number" required />
-      <label>Work Details:</label>
-      <textarea id="workDetails"></textarea>
+      <label>Client Name:</label><input id="clientName" type="text" />
+      <label>Client Amount:</label><input id="clientAmount" type="number" />
+      <label>Work Details:</label><textarea id="workDetails"></textarea>
       <label><input id="fullPayment" type="checkbox" /> Full Payment Received</label>
       <button onclick="submitTask()">Submit</button>
       <button class="back-btn" onclick="goBack()">← Back</button>
     </div>
 
+    <!-- View Specs -->
     <div id="specs" class="view">
       <h2>Saved Tasks</h2>
       <pre id="specsList">No tasks saved.</pre>
       <button class="back-btn" onclick="goBack()">← Back</button>
     </div>
+
+    <!-- Leads Section -->
+    <div id="leads" class="view">
+      <h2>Leads Section</h2>
+      <p>Here you can add leads-related content.</p>
+      <button class="back-btn" onclick="goBack()">← Back</button>
+    </div>
+
+    <!-- Updates Inbox -->
+    <div id="updates" class="view">
+      <h2>Updates Inbox</h2>
+      <p>Here inbox messages or updates will appear.</p>
+      <button class="back-btn" onclick="goBack()">← Back</button>
+    </div>
   </div>
 
-  <script>
-    let tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+<script>
+  let tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
 
-    function showView(id) {
-      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-      document.querySelector('.buttons').style.display = 'none';
-      if (id === 'specs') {
-        renderSpecs();
-      }
+  function showView(id) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    if (id) document.getElementById(id).classList.add('active');
+    document.querySelector('.buttons').style.display = 'none';
+    if (id === 'specs') renderSpecs();
+  }
+
+  function goBack() {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelector('.buttons').style.display = 'flex';
+  }
+
+  function submitTask() {
+    const client = document.getElementById('clientName').value.trim();
+    const amount = document.getElementById('clientAmount').value.trim();
+    const details = document.getElementById('workDetails').value.trim();
+    const paid = document.getElementById('fullPayment').checked;
+    if (!client || !amount || !details) {
+      alert('Fill in all fields.');
+      return;
     }
+    tasks.push({ client, amount, details, paid });
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    alert('Task saved!');
+    goBack();
+  }
 
-    function goBack() {
-      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-      document.querySelector('.buttons').style.display = 'flex';
+  function renderSpecs() {
+    if (!tasks.length) {
+      document.getElementById('specsList').textContent = 'No tasks saved.';
+      return;
     }
+    const txt = tasks.map((t,i) => 
+      `#${i+1}\nClient: ${t.client}\nAmount: $${t.amount}\nDetails: ${t.details}\nFull Payment: ${t.paid ? '✅ Yes' : '❌ No'}\n`
+    ).join('\n');
+    document.getElementById('specsList').textContent = txt;
+  }
 
-    function submitTask() {
-      const client = document.getElementById('clientName').value.trim();
-      const amount = document.getElementById('clientAmount').value.trim();
-      const details = document.getElementById('workDetails').value.trim();
-      const paid = document.getElementById('fullPayment').checked;
-      if (!client || !amount || !details) {
-        alert('Please complete all fields.');
-        return;
-      }
-      tasks.push({ client, amount, details, paid });
-      localStorage.setItem('tasks', JSON.stringify(tasks));
-      alert('Task saved successfully!');
-      goBack();
-    }
-
-    function renderSpecs() {
-      if (!tasks.length) {
-        document.getElementById('specsList').textContent = 'No tasks saved.';
-        return;
-      }
-      const text = tasks.map((t,i) => 
-        `#${i+1}
- Client: ${t.client}
- Amount: $${t.amount}
- Details: ${t.details}
- Full Payment: ${t.paid ? '✅ Yes' : '❌ No'}\n`
-      ).join('\n');
-      document.getElementById('specsList').textContent = text;
-    }
-
-    window.onload = () => { showView(''); };
-  </script>
+  window.onload = () => showView('');
+</script>
 </body>
 </html>
