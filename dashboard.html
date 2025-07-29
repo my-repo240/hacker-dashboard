@@ -2,128 +2,212 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AI FUTURE POWER Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Business Dashboard</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: monospace;
-      height: 100vh;
-      background: url('https://i.imgur.com/3ZQ3T6x.jpg') center/cover no-repeat;
-      position: relative;
-      overflow: hidden;
-      color: #0f0;
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #f4f8fb;
+      color: #333;
     }
-    /* Animated overlay */
-    body::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 32, 32, 0.6);
-      animation: pulse 8s ease-in-out infinite;
-      z-index: 0;
+
+    /* HEADER NAV */
+    header {
+      background: #ffffff;
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-    @keyframes pulse {
-      0%,100% { background: rgba(0,32,32,0.6); }
-      50% { background: rgba(0,48,48,0.4); }
+    .logo {
+      font-weight: 700;
+      font-size: 20px;
+      color: #0d47a1;
     }
-    .container {
-      position: relative; z-index: 1;
-      width: 90%; max-width: 900px;
-      margin: auto;
-      padding-top: 60px;
+    nav a {
+      margin-left: 30px;
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
     }
+
+    /* HERO */
+    .hero {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 60px 40px;
+      background: linear-gradient(to right, #e3f2fd, #ffffff);
+    }
+    .hero-text {
+      max-width: 600px;
+    }
+    .hero-text h1 {
+      font-size: 36px;
+      margin-bottom: 20px;
+      color: #0d47a1;
+    }
+    .hero-text p {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    .hero-text button {
+      background: #0d47a1;
+      color: #fff;
+      border: none;
+      padding: 12px 25px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .hero img {
+      max-width: 300px;
+      border-radius: 10px;
+    }
+
+    /* BUTTONS */
     .buttons {
       display: flex;
-      gap: 15px;
       flex-wrap: wrap;
       justify-content: center;
-      margin-bottom: 40px;
+      gap: 20px;
+      margin: 40px 0;
     }
-    button {
-      background: transparent;
-      border: 2px solid #0f0;
-      color: #0f0;
+    .buttons button {
+      background: #0d47a1;
+      color: #fff;
+      padding: 15px 25px;
       font-size: 16px;
-      padding: 10px 18px;
-      border-radius: 8px;
+      border: none;
+      border-radius: 5px;
       cursor: pointer;
-      transition: background 0.3s, box-shadow 0.3s;
+      transition: background 0.3s ease;
     }
-    button:hover {
-      background: #0f0;
-      color: #000;
-      box-shadow: 0 0 8px #0f0;
+    .buttons button:hover {
+      background: #1565c0;
     }
+
+    /* SECTION VIEW AREA */
     .view {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 30px;
+      margin-bottom: 60px;
       display: none;
-      background: rgba(0, 0, 0, 0.7);
-      border: 1px solid #0f0;
-      padding: 20px;
       border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     }
     .view.active { display: block; }
-    label { display: block; margin-top: 10px; }
-    input, textarea { width: 100%; margin-top: 5px; margin-bottom: 15px; padding: 8px; border-radius: 5px; background: #002222; color: #0f0; border: 1px solid #0f0; }
+
+    label { display: block; margin-top: 15px; font-weight: 500; }
+    input, textarea {
+      width: 100%;
+      margin-top: 5px;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
     textarea { resize: vertical; }
-    .back-btn { margin-top: 10px; background: #0f0; color: #000; border: none; cursor: pointer; }
-    pre { white-space: pre-wrap; word-break: break-word; font-size: 14px; line-height: 1.4; }
+
+    .back-btn {
+      margin-top: 20px;
+      background: #ccc;
+      border: none;
+      padding: 10px 18px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="buttons">
-      <button onclick="showView('create')">➕ Create Task</button>
-      <button onclick="showView('specs')">📋 View Specs</button>
-      <button onclick="showView('leads')">🧭 Leads Section</button>
-      <button onclick="showView('updates')">📥 Updates Inbox</button>
-    </div>
 
-    <!-- Create Task -->
-    <div id="create" class="view">
-      <h2>Create Task</h2>
-      <label>Client Name:</label><input id="clientName" type="text" />
-      <label>Client Amount:</label><input id="clientAmount" type="number" />
-      <label>Work Details:</label><textarea id="workDetails"></textarea>
-      <label><input id="fullPayment" type="checkbox" /> Full Payment Received</label>
-      <button onclick="submitTask()">Submit</button>
-      <button class="back-btn" onclick="goBack()">← Back</button>
-    </div>
+<header>
+  <div class="logo">💼 Blossom Dashboard</div>
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">About</a>
+    <a href="#">Portfolio</a>
+    <a href="#">Contact</a>
+  </nav>
+</header>
 
-    <!-- View Specs -->
-    <div id="specs" class="view">
-      <h2>Saved Tasks</h2>
-      <pre id="specsList">No tasks saved.</pre>
-      <button class="back-btn" onclick="goBack()">← Back</button>
-    </div>
-
-    <!-- Leads Section -->
-    <div id="leads" class="view">
-      <h2>Leads Section</h2>
-      <p>Here you can add leads-related content.</p>
-      <button class="back-btn" onclick="goBack()">← Back</button>
-    </div>
-
-    <!-- Updates Inbox -->
-    <div id="updates" class="view">
-      <h2>Updates Inbox</h2>
-      <p>Here inbox messages or updates will appear.</p>
-      <button class="back-btn" onclick="goBack()">← Back</button>
-    </div>
+<section class="hero">
+  <div class="hero-text">
+    <h1>Welcome to Your Business Panel</h1>
+    <p>Manage tasks, view leads, monitor inbox updates, and streamline your workflow — all in one dashboard.</p>
+    <button onclick="scrollToButtons()">Get Started</button>
   </div>
+  <img src="https://i.imgur.com/g1IbYtB.png" alt="Business Woman">
+</section>
+
+<section class="buttons" id="mainButtons">
+  <button onclick="showView('create')">➕ Create Task</button>
+  <button onclick="showView('specs')">📋 View Specs</button>
+  <button onclick="showView('leads')">🧭 Leads Section</button>
+  <button onclick="showView('updates')">📥 Updates Inbox</button>
+  <button onclick="showView('settings')">⚙️ Settings</button>
+  <button onclick="showView('reports')">📊 Reports</button>
+</section>
+
+<!-- VIEWS -->
+<div id="create" class="view">
+  <h2>Create Task</h2>
+  <label>Client Name:</label><input id="clientName" type="text" />
+  <label>Client Amount:</label><input id="clientAmount" type="number" />
+  <label>Work Details:</label><textarea id="workDetails"></textarea>
+  <label><input id="fullPayment" type="checkbox" /> Full Payment Received</label>
+  <button onclick="submitTask()">Submit</button>
+  <button class="back-btn" onclick="goBack()">← Back</button>
+</div>
+
+<div id="specs" class="view">
+  <h2>Saved Tasks</h2>
+  <pre id="specsList">No tasks saved.</pre>
+  <button class="back-btn" onclick="goBack()">← Back</button>
+</div>
+
+<div id="leads" class="view">
+  <h2>Leads Section</h2>
+  <p>Organize and track client leads.</p>
+  <button class="back-btn" onclick="goBack()">← Back</button>
+</div>
+
+<div id="updates" class="view">
+  <h2>Updates Inbox</h2>
+  <p>All your recent updates and system alerts will appear here.</p>
+  <button class="back-btn" onclick="goBack()">← Back</button>
+</div>
+
+<div id="settings" class="view">
+  <h2>Settings</h2>
+  <p>Customize your dashboard settings here.</p>
+  <button class="back-btn" onclick="goBack()">← Back</button>
+</div>
+
+<div id="reports" class="view">
+  <h2>Reports</h2>
+  <p>View performance, financial, and task reports.</p>
+  <button class="back-btn" onclick="goBack()">← Back</button>
+</div>
 
 <script>
   let tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
 
   function showView(id) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    if (id) document.getElementById(id).classList.add('active');
-    document.querySelector('.buttons').style.display = 'none';
+    document.getElementById(id).classList.add('active');
+    document.getElementById('mainButtons').style.display = 'none';
     if (id === 'specs') renderSpecs();
   }
 
   function goBack() {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    document.querySelector('.buttons').style.display = 'flex';
+    document.getElementById('mainButtons').style.display = 'flex';
   }
 
   function submitTask() {
@@ -132,27 +216,32 @@
     const details = document.getElementById('workDetails').value.trim();
     const paid = document.getElementById('fullPayment').checked;
     if (!client || !amount || !details) {
-      alert('Fill in all fields.');
+      alert('Please complete all fields');
       return;
     }
     tasks.push({ client, amount, details, paid });
     localStorage.setItem('tasks', JSON.stringify(tasks));
-    alert('Task saved!');
+    alert('Task saved successfully!');
     goBack();
   }
 
   function renderSpecs() {
+    const list = document.getElementById('specsList');
     if (!tasks.length) {
-      document.getElementById('specsList').textContent = 'No tasks saved.';
+      list.textContent = 'No tasks saved.';
       return;
     }
-    const txt = tasks.map((t,i) => 
-      `#${i+1}\nClient: ${t.client}\nAmount: $${t.amount}\nDetails: ${t.details}\nFull Payment: ${t.paid ? '✅ Yes' : '❌ No'}\n`
+    list.textContent = tasks.map((t, i) => 
+      `#${i+1}\nClient: ${t.client}\nAmount: $${t.amount}\nDetails: ${t.details}\nFull Payment: ${t.paid ? 'Yes' : 'No'}\n`
     ).join('\n');
-    document.getElementById('specsList').textContent = txt;
   }
 
-  window.onload = () => showView('');
+  function scrollToButtons() {
+    document.getElementById('mainButtons').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  window.onload = () => goBack();
 </script>
+
 </body>
 </html>
