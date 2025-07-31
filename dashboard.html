@@ -1,108 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>CRM‑Style Dashboard</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>CRM Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    body {margin:0;font-family:'Poppins', sans-serif;background:#f4f8fb;color:#333;}
-    header {background:#fff;padding:15px 40px;box-shadow:0 2px 5px rgba(0,0,0,0.1); display:flex; justify-content:space-between; align-items:center;}
-    header .logo {font-size:20px; font-weight:700; color:#0d47a1;}
-    .container {display:flex;}
-    nav.sidebar {width:220px;background:#fff;min-height:100vh;padding:20px 10px;}
-    nav.sidebar a, nav.sidebar button {display:block;width:100%;padding:10px;font-weight:500;color:#333;text-align:left;border:none;background:none;cursor:pointer;}
-    nav.sidebar a:hover, nav.sidebar button:hover {background:#eceff1;}
-    .main {flex:1;padding:20px;}
-    .cards {display:flex;gap:20px;margin-bottom:20px;}
-    .card {background:#fff;padding:20px;border-radius:6px;flex:1;box-shadow:0 1px 3px rgba(0,0,0,0.1); text-align:center;}
-    table {width:100%;border-collapse:collapse;background:#fff;border-radius:6px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.1);}
-    th,td {padding:12px 15px;border-bottom:1px solid #eee;font-size:14px;}
-    th {background:#fafafa;text-align:left;}
-    tr:last-child td {border-bottom:none;}
-    .btn {padding:8px 14px; border:none; border-radius:4px; cursor:pointer; background:#0d47a1;color:#fff;}
-    .btn:hover {background:#1565c0;}
-    #modal {position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);display:none;justify-content:center;align-items:center;}
-    #modal .dialog {background:#fff;padding:20px;border-radius:6px;width:320px;}
-    #modal input,textarea,select {width:100%;margin:8px 0;padding:8px;border:1px solid #ccc;border-radius:4px;font-size:14px;}
+    body { background: #f4f8fb; font-family: 'Poppins', sans-serif; }
+    .sidebar { width: 240px; }
+    .card-status { flex:1; margin-right:1rem; }
+    .badge-status { text-transform: capitalize; }
   </style>
 </head>
 <body>
-  <header><div class="logo">Primework‑style</div></header>
-  <div class="container">
-    <nav class="sidebar">
-      <button onclick="openModal()">+ New Task</button>
-      <a href="#">Dashboard</a>
-      <a href="#">Tasks</a>
-      <a href="#">Leads</a>
-      <a href="#">Inbox</a>
-      <a href="#">Settings</a>
+  <div class="d-flex">
+    <nav class="sidebar bg-white vh-100 border-end p-3">
+      <button class="btn btn-primary w-100 mb-3" id="btnNew">+ New Task</button>
+      <ul class="nav flex-column">
+        <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Tasks</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Leads</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Inbox</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Settings</a></li>
+      </ul>
     </nav>
-    <div class="main">
-      <div class="cards">
-        <div class="card">Not Started<br><strong id="count-new">0</strong></div>
-        <div class="card">In Progress<br><strong id="count-progress">0</strong></div>
-        <div class="card">Testing<br><strong id="count-testing">0</strong></div>
-        <div class="card">Complete<br><strong id="count-complete">0</strong></div>
+    <main class="flex-fill p-4">
+      <div class="d-flex mb-4">
+        <div class="card card-status p-3 text-center"><strong>Not Started</strong><div id="c-new">0</div></div>
+        <div class="card card-status p-3 text-center"><strong>In Progress</strong><div id="c-progress">0</div></div>
+        <div class="card card-status p-3 text-center"><strong>Testing</strong><div id="c-testing">0</div></div>
+        <div class="card card-status p-3 text-center"><strong>Complete</strong><div id="c-complete">0</div></div>
       </div>
-      <table>
-        <thead><tr>
-          <th>#</th><th>Client</th><th>Status</th><th>Start Date</th><th>Due Date</th><th>Priority</th>
-        </tr></thead>
-        <tbody id="taskTable"><tr><td colspan="6" style="text-align:center;">No tasks yet</td></tr></tbody>
-      </table>
+      <div class="table-responsive bg-white rounded shadow-sm">
+        <table class="table mb-0">
+          <thead class="table-light">
+            <tr><th>#</th><th>Client</th><th>Status</th><th>Start Date</th><th>Due Date</th><th>Priority</th></tr>
+          </thead>
+          <tbody id="taskBody"><tr><td colspan="6" class="text-center py-4">No tasks yet</td></tr></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="taskModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header"><h5>Create Task</h5><button data-bs-dismiss="modal" class="btn-close"></button></div>
+        <div class="modal-body">
+          <input id="client" class="form-control mb-2" placeholder="Client Name" />
+          <input type="date" id="start" class="form-control mb-2"/>
+          <input type="date" id="due" class="form-control mb-2"/>
+          <select id="status" class="form-select mb-2">
+            <option value="new">Not Started</option>
+            <option value="progress">In Progress</option>
+            <option value="testing">Testing</option>
+            <option value="complete">Complete</option>
+          </select>
+          <select id="priority" class="form-select mb-2"><option>Low</option><option>Medium</option><option>High</option></select>
+        </div>
+        <div class="modal-footer">
+          <button id="saveTask" class="btn btn-primary">Save</button>
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div id="modal">
-    <div class="dialog">
-      <h3>Create Task</h3>
-      <input type="text" id="cname" placeholder="Client Name"/>
-      <input type="date" id="cstart"/>
-      <input type="date" id="cdue"/>
-      <select id="cstatus"><option value="new">Not Started</option><option value="progress">In Progress</option><option value="testing">Testing</option><option value="complete">Complete</option></select>
-      <select id="cpriority"><option>Low</option><option>Medium</option><option>High</option></select>
-      <button onclick="addTask()" class="btn">Submit</button>
-      <button onclick="closeModal()" class="btn" style="background:#aaa;margin-left:6px;">Cancel</button>
-    </div>
-  </div>
-
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    let tasks = [];
-    function openModal(){ document.getElementById('modal').style.display='flex'; }
-    function closeModal(){ document.getElementById('modal').style.display='none'; }
-    function updateCounts(){
-      const counts = {new:0,progress:0,testing:0,complete:0};
-      tasks.forEach(t=>counts[t.status]++);
-      document.getElementById('count-new').textContent = counts.new;
-      document.getElementById('count-progress').textContent = counts.progress;
-      document.getElementById('count-testing').textContent = counts.testing;
-      document.getElementById('count-complete').textContent = counts.complete;
+    const tasks = [];
+    function updateCounts() {
+      const counts = { new:0, progress:0, testing:0, complete:0 };
+      tasks.forEach(t => counts[t.status]++);
+      document.getElementById('c-'+Object.keys(counts)[0]).textContent = counts.new;
+      document.getElementById('c-progress').textContent = counts.progress;
+      document.getElementById('c-testing').textContent = counts.testing;
+      document.getElementById('c-complete').textContent = counts.complete;
     }
-    function renderTable(){
-      const tbody = document.getElementById('taskTable');
-      tbody.innerHTML = '';
-      if (!tasks.length){
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No tasks yet</td></tr>';
+    function renderTable() {
+      const body = document.getElementById('taskBody');
+      body.innerHTML = '';
+      if (!tasks.length) {
+        body.innerHTML = '<tr><td colspan="6" class="text-center py-4">No tasks yet</td></tr>';
         return;
       }
       tasks.forEach((t,i) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `<td>${i+1}</td><td>${t.client}</td>
-          <td>${t.status}</td><td>${t.start}</td><td>${t.due}</td><td>${t.priority}</td>`;
-        tbody.appendChild(tr);
+          <td><span class="badge bg-secondary badge-status">${t.status.replace('-', ' ')}</span></td>
+          <td>${t.start}</td><td>${t.due}</td><td>${t.priority}</td>`;
+        body.appendChild(tr);
       });
     }
-    function addTask(){
-      const c = document.getElementById('cname').value,
-            s = document.getElementById('cstart').value,
-            d = document.getElementById('cdue').value,
-            st = document.getElementById('cstatus').value,
-            p = document.getElementById('cpriority').value;
-      if (!c || !s || !d) return alert('Fill all fields');
-      tasks.push({client:c,start:s,due:d,status:st,priority:p});
-      updateCounts(); renderTable(); closeModal();
-      document.getElementById('cname').value='';
-    }
+    document.getElementById('btnNew').onclick = () => new bootstrap.Modal(document.getElementById('taskModal')).show();
+    document.getElementById('saveTask').onclick = () => {
+      const c = client.value.trim(), s = start.value, d = due.value, st = status.value, p = priority.value;
+      if (!c || !s || !d) return alert('All fields required');
+      tasks.push({ client:c, start:s, due:d, status:st, priority:p });
+      updateCounts(); renderTable();
+      bootstrap.Modal.getInstance(document.getElementById('taskModal')).hide();
+      client.value = '';
+    };
+    updateCounts(); renderTable();
   </script>
 </body>
 </html>
