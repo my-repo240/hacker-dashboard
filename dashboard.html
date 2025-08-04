@@ -5,63 +5,55 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>CRM Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #dff6ff, #eaf6f6);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      background: linear-gradient(to bottom right, #e3f2fd, #bbdefb);
     }
     header {
       background: #0d47a1;
-      color: white;
-      padding: 20px 40px;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
       font-size: 24px;
-      font-weight: 700;
+      font-weight: bold;
     }
     .container-fluid {
       display: flex;
-      flex: 1;
-      overflow: hidden;
+      height: calc(100vh - 70px);
     }
-    .sidebar {
-      width: 220px;
-      background: #ffffff;
-      border-right: 1px solid #ddd;
+    nav.sidebar {
+      width: 200px;
+      background: #fff;
       padding: 20px;
+      border-right: 1px solid #ccc;
     }
-    .sidebar button, .sidebar a {
+    nav.sidebar a {
       display: block;
-      width: 100%;
-      padding: 12px;
-      color: #0d47a1;
-      background: transparent;
-      border: none;
-      text-align: left;
-      font-weight: 500;
-      cursor: pointer;
+      padding: 10px;
+      margin-bottom: 10px;
       text-decoration: none;
+      color: #0d47a1;
+      font-weight: 500;
     }
-    .sidebar a:hover, .sidebar button:hover {
+    nav.sidebar a:hover {
       background: #e3f2fd;
+      border-radius: 5px;
     }
     .main-area {
       flex: 1;
-      padding: 30px;
+      padding: 20px;
       overflow-y: auto;
+      background-color: #f5f5f5;
     }
     .card {
       background: white;
       padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       margin-bottom: 20px;
-    }
-    .table th, .table td {
-      vertical-align: middle;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
     .section {
       display: none;
@@ -69,37 +61,39 @@
     .active-section {
       display: block;
     }
+    table td, table th {
+      vertical-align: middle !important;
+    }
   </style>
 </head>
 <body>
-
   <header>CRM Dashboard</header>
   <div class="container-fluid">
     <nav class="sidebar">
-      <button onclick="showSection('dashboard')">Dashboard</button>
-      <button onclick="showSection('tasks')">Tasks</button>
-      <button onclick="showSection('leads')">Leads</button>
-      <button onclick="showSection('inbox')">Inbox</button>
-      <button onclick="showSection('account')">Account</button>
-      <button class="btn btn-primary mt-3" onclick="openTaskModal()">+ New Task</button>
+      <button class="btn btn-primary w-100 mb-3" onclick="openTaskModal()">+ New Task</button>
+      <a href="#" onclick="showSection('dashboard')">Dashboard</a>
+      <a href="#" onclick="showSection('tasks')">Tasks</a>
+      <a href="#" onclick="showSection('leads')">Leads</a>
+      <a href="#" onclick="showSection('inbox')">Inbox</a>
+      <a href="#" onclick="showSection('account')">Account</a>
     </nav>
 
     <div class="main-area">
-      <!-- DASHBOARD -->
+      <!-- Dashboard Section -->
       <div id="dashboard" class="section active-section">
         <div class="row text-center">
-          <div class="col card">Not Started<br><strong id="cntNew">0</strong></div>
-          <div class="col card">In Progress<br><strong id="cntProgress">0</strong></div>
-          <div class="col card">Testing<br><strong id="cntTesting">0</strong></div>
-          <div class="col card">Awaiting Feedback<br><strong id="cntAwait">0</strong></div>
-          <div class="col card">Complete<br><strong id="cntComplete">0</strong></div>
+          <div class="col card"><h6>Not Started</h6><div id="cntNew">0</div></div>
+          <div class="col card"><h6>In Progress</h6><div id="cntProgress">0</div></div>
+          <div class="col card"><h6>Testing</h6><div id="cntTesting">0</div></div>
+          <div class="col card"><h6>Awaiting Feedback</h6><div id="cntAwait">0</div></div>
+          <div class="col card"><h6>Complete</h6><div id="cntComplete">0</div></div>
         </div>
       </div>
 
-      <!-- TASKS -->
+      <!-- Tasks Section -->
       <div id="tasks" class="section">
-        <h4>All Tasks</h4>
-        <table class="table table-bordered mt-3">
+        <h4>Tasks</h4>
+        <table class="table table-bordered bg-white">
           <thead class="table-light">
             <tr><th>#</th><th>Name</th><th>Status</th><th>Start</th><th>Due</th><th>Priority</th></tr>
           </thead>
@@ -107,11 +101,11 @@
         </table>
       </div>
 
-      <!-- LEADS -->
+      <!-- Leads Section -->
       <div id="leads" class="section">
         <h4>Leads</h4>
         <div id="leadForm" class="mb-3"></div>
-        <table class="table table-bordered">
+        <table class="table table-bordered bg-white">
           <thead class="table-light">
             <tr><th>#</th><th>Client Name</th><th>Contact</th><th>Domain</th></tr>
           </thead>
@@ -119,48 +113,40 @@
         </table>
       </div>
 
-      <!-- INBOX -->
+      <!-- Inbox Section -->
       <div id="inbox" class="section">
-        <h4>Inbox Messages</h4>
+        <h4>Inbox</h4>
         <div id="inboxForm" class="mb-3"></div>
         <ul id="inboxList" class="list-group"></ul>
       </div>
 
-      <!-- ACCOUNT -->
+      <!-- Account Section -->
       <div id="account" class="section">
-        <h4>Account Details</h4>
-        <p><strong>Bank Name:</strong> XYZ Bank</p>
-        <p><strong>Account No:</strong> 1234567890</p>
-        <p><strong>IFSC:</strong> XYZB0000123</p>
-        <p><strong>Account Holder:</strong> Your Name</p>
+        <h4>Bank Account Details</h4>
+        <div class="card">
+          <p><strong>Bank Name:</strong> Sample Bank</p>
+          <p><strong>Account Number:</strong> 1234567890</p>
+          <p><strong>IFSC:</strong> SAMPLE1234</p>
+          <p><strong>Account Holder:</strong> Admin User</p>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- MODAL FOR TASK -->
+  <!-- Task Modal -->
   <div class="modal fade" id="taskModal" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5>Create Task</h5>
-          <button class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
+        <div class="modal-header"><h5 class="modal-title">Create Task</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
         <div class="modal-body">
           <input id="tName" class="form-control mb-2" placeholder="Task Name">
           <input id="tStart" type="date" class="form-control mb-2">
           <input id="tDue" type="date" class="form-control mb-2">
           <select id="tStatus" class="form-select mb-2">
-            <option>Not Started</option>
-            <option>In Progress</option>
-            <option>Testing</option>
-            <option>Awaiting Feedback</option>
-            <option>Complete</option>
+            <option>Not Started</option><option>In Progress</option><option>Testing</option><option>Awaiting Feedback</option><option>Complete</option>
           </select>
           <select id="tPriority" class="form-select mb-2">
-            <option>Low</option>
-            <option>Medium</option>
-            <option>High</option>
-            <option>Urgent</option>
+            <option>Low</option><option>Medium</option><option>High</option><option>Urgent</option>
           </select>
         </div>
         <div class="modal-footer">
@@ -171,12 +157,12 @@
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    const userRole = "admin"; // roles: admin, editor, viewer
-    const tasks = [];
-    const leads = [];
-    const inboxNotes = [];
+    const userRole = "admin"; // roles: admin, viewer, editor
+    let tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+    let leads = JSON.parse(localStorage.getItem("leads") || "[]");
+    let inboxNotes = JSON.parse(localStorage.getItem("inbox") || "[]");
 
     function showSection(id) {
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
@@ -194,25 +180,18 @@
       const status = tStatus.value;
       const priority = tPriority.value;
       if (!name || !start || !due) return alert("Fill all fields");
-
       tasks.push({ name, start, due, status, priority });
-      renderTasks();
-      updateDashboard();
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+      renderTasks(); updateDashboard();
       bootstrap.Modal.getInstance(document.getElementById('taskModal')).hide();
       tName.value = tStart.value = tDue.value = "";
     }
 
     function renderTasks() {
-      taskBody.innerHTML = tasks.map((t, i) => `
-        <tr>
-          <td>${i+1}</td>
-          <td>${t.name}</td>
-          <td>${t.status}</td>
-          <td>${t.start}</td>
-          <td>${t.due}</td>
-          <td>${t.priority}</td>
-        </tr>
-      `).join('');
+      const body = document.getElementById("taskBody");
+      body.innerHTML = tasks.length ? tasks.map((t,i) => `
+        <tr><td>${i+1}</td><td>${t.name}</td><td>${t.status}</td><td>${t.start}</td><td>${t.due}</td><td>${t.priority}</td></tr>
+      `).join('') : `<tr><td colspan="6" class="text-center">No tasks yet</td></tr>`;
     }
 
     function updateDashboard() {
@@ -227,17 +206,13 @@
 
     function renderLeads() {
       const body = document.getElementById("leadsBody");
-      if (leads.length === 0) {
-        body.innerHTML = `<tr><td colspan="4" class="text-center">No leads available</td></tr>`;
-        return;
-      }
-      body.innerHTML = leads.map((l, i) => `
+      body.innerHTML = leads.length ? leads.map((l,i) => `
         <tr><td>${i+1}</td><td>${l.name}</td><td>${l.contact}</td><td>${l.domain}</td></tr>
-      `).join('');
+      `).join('') : `<tr><td colspan="4" class="text-center">No leads available</td></tr>`;
     }
 
     function renderInbox() {
-      inboxList.innerHTML = inboxNotes.map((n, i) => `<li class="list-group-item">${n}</li>`).join('');
+      inboxList.innerHTML = inboxNotes.length ? inboxNotes.map(n => `<li class="list-group-item">${n}</li>`).join('') : `<li class="list-group-item text-center">No notes</li>`;
     }
 
     function setupForms() {
@@ -261,6 +236,7 @@
       const domain = clientDomain.value.trim();
       if (!name || !contact || !domain) return alert("Fill all fields");
       leads.push({ name, contact, domain });
+      localStorage.setItem("leads", JSON.stringify(leads));
       renderLeads();
       clientName.value = clientContact.value = clientDomain.value = "";
     }
@@ -269,6 +245,7 @@
       const msg = inboxMessage.value.trim();
       if (!msg) return alert("Message is empty");
       inboxNotes.push(msg);
+      localStorage.setItem("inbox", JSON.stringify(inboxNotes));
       renderInbox();
       inboxMessage.value = "";
     }
