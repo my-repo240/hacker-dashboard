@@ -16,7 +16,7 @@
     nav.sidebar button, nav.sidebar a { display:block; width:100%; padding:10px; text-align:left; color:#333; font-weight:500; background:none; border:none; cursor:pointer; }
     nav.sidebar a:hover, nav.sidebar button:hover { background:#eceff1; }
     .main-area { flex:1; padding:20px; overflow-y:auto; }
-    .cards { display:flex; gap:20px; margin-bottom:20px; }
+    .cards { display:flex; gap:20px; margin-bottom:20px; flex-wrap: wrap; }
     .card { background:#fff; flex:1; padding:20px; text-align:center; border-radius:6px; box-shadow:0 1px 3px rgba(0,0,0,0.1); }
     table { width:100%; border-collapse:collapse; background:#fff; border-radius:6px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.1); }
     th, td { padding:12px 15px; border-bottom:1px solid #eee; font-size:14px; }
@@ -39,6 +39,7 @@
       <a href="#">Settings</a>
     </nav>
     <div class="main-area">
+      <!-- Task Summary Cards -->
       <div class="row cards">
         <div class="col card">Not Started<br><strong id="cntNew">0</strong></div>
         <div class="col card">In Progress<br><strong id="cntProgress">0</strong></div>
@@ -46,13 +47,34 @@
         <div class="col card">Awaiting Feedback<br><strong id="cntAwait">0</strong></div>
         <div class="col card">Complete<br><strong id="cntComplete">0</strong></div>
       </div>
-      <div class="table-responsive">
+
+      <!-- Tasks Table -->
+      <div class="table-responsive mb-5">
         <table class="table">
           <thead class="table-light">
             <tr><th>#</th><th>Name</th><th>Status</th><th>Start</th><th>Due</th><th>Priority</th><th>Actions</th></tr>
           </thead>
           <tbody id="taskBody"><tr><td colspan="7" class="text-center py-4">No tasks yet</td></tr></tbody>
         </table>
+      </div>
+
+      <!-- Leads Section -->
+      <div id="leadsSection" class="mt-4">
+        <h4>Leads</h4>
+        <div id="leadForm" class="mb-3" style="display: none;">
+          <input id="clientName" class="form-control mb-2" placeholder="Client Name">
+          <input id="clientNumber" class="form-control mb-2" placeholder="Contact Number">
+          <input id="clientDomain" class="form-control mb-2" placeholder="Domain">
+          <button class="btn btn-success" onclick="addLead()">Add Lead</button>
+        </div>
+        <div class="table-responsive">
+          <table class="table">
+            <thead class="table-light">
+              <tr><th>#</th><th>Client Name</th><th>Contact</th><th>Domain</th></tr>
+            </thead>
+            <tbody id="leadsBody"><tr><td colspan="4" class="text-center py-3">No leads available</td></tr></tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -83,6 +105,10 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
+    // Role control
+    const isMaster = true; // Change to false for non-admin users
+
+    // Task section logic
     const tasks = [];
     document.getElementById('btnNewTask').onclick = () => new bootstrap.Modal(document.getElementById('taskModal')).show();
     document.getElementById('saveTask').onclick = () => {
@@ -100,6 +126,7 @@
       bootstrap.Modal.getInstance(document.getElementById('taskModal')).hide();
       tName.value = '';
     };
+
     function renderTasks(){
       const body = document.getElementById('taskBody');
       body.innerHTML = tasks.length
@@ -115,6 +142,7 @@
             </tr>`).join('')
         : `<tr><td colspan="7" class="text-center py-4">No tasks yet</td></tr>`;
     }
+
     function updateCounts(){
       const counts = { "Not Started":0, "In Progress":0, "Testing":0, "Awaiting Feedback":0, "Complete":0 };
       tasks.forEach(t => counts[t.status]++);
@@ -124,7 +152,48 @@
       cntAwait.textContent = counts["Awaiting Feedback"];
       cntComplete.textContent = counts["Complete"];
     }
+
+    // Leads logic
+    const leads = [];
+
+    function showLeadForm() {
+      if (isMaster) {
+        document.getElementById('leadForm').style.display = 'block';
+      }
+    }
+
+    function addLead() {
+      const name = clientName.value.trim();
+      const number = clientNumber.value.trim();
+      const domain = clientDomain.value.trim();
+
+      if (!name || !number || !domain) return alert('Please fill all fields');
+
+      leads.push({ name, number, domain });
+      renderLeads();
+      clientName.value = clientNumber.value = clientDomain.value = '';
+    }
+
+    function renderLeads() {
+      const body = document.getElementById('leadsBody');
+      if (leads.length === 0) {
+        body.innerHTML = `<tr><td colspan="4" class="text-center py-3">No leads available</td></tr>`;
+        return;
+      }
+      body.innerHTML = leads.map((l, i) => `
+        <tr>
+          <td>${i + 1}</td>
+          <td>${l.name}</td>
+          <td>${l.number}</td>
+          <td>${l.domain}</td>
+        </tr>
+      `).join('');
+    }
+
+    // Init
+    showLeadForm();
     renderTasks();
+    renderLeads();
   </script>
 </body>
 </html>
