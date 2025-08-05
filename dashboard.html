@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>CRM Dashboard</title>
   <style>
     body{margin:0;font-family:Arial,sans-serif;background:#f5f5f5;}
@@ -28,11 +29,10 @@
     button.submit{background:#1976d2;color:#fff;padding:8px 15px;border:none;border-radius:4px;cursor:pointer;margin-top:10px;}
   </style>
 
-  <!-- Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getFirestore, collection, addDoc, onSnapshot, doc, deleteDoc, updateDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
     import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
     const firebaseConfig = {
@@ -49,7 +49,6 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
     const storage = getStorage(app);
-
     let editId = null;
 
     function setupAuthUI(user) {
@@ -71,7 +70,8 @@
 
         const allowedUsers = [
           "Ismaillogistics@gmail.com",
-          "Ashiklogistics@gmail.com"
+          "Ashiklogistics@gmail.com",
+          "you@example.com" // <-- Add your email here
         ];
 
         if (!allowedUsers.includes(email)) {
@@ -88,26 +88,31 @@
 
       document.getElementById("logoutBtn").onclick = () => signOut(auth);
 
-      // Tab switching
       document.querySelectorAll(".tabs button").forEach(btn => {
         btn.onclick = () => {
-          document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
+          document.querySelectorAll(".tabs button").forEach(b => b.classList.remove("active"));
           btn.classList.add("active");
-          document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+          document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
           document.getElementById(btn.dataset.target).classList.add("active");
         };
       });
 
-      // Open modal
       document.getElementById("newTaskBtn").onclick = () => {
         editId = null;
         document.getElementById("taskForm").reset();
         document.getElementById("modalTitle").innerText = "Add Task";
         document.getElementById("taskModal").style.display = "block";
       };
-      // Close modal
-      document.getElementById("closeModal").onclick = () => document.getElementById("taskModal").style.display = "none";
-      window.onclick = e => { if(e.target.id==="taskModal") document.getElementById("taskModal").style.display = "none"; };
+
+      document.getElementById("closeModal").onclick = () => {
+        document.getElementById("taskModal").style.display = "none";
+      };
+
+      window.onclick = e => {
+        if(e.target.id === "taskModal") {
+          document.getElementById("taskModal").style.display = "none";
+        }
+      };
 
       document.getElementById("taskForm").onsubmit = async e => {
         e.preventDefault();
@@ -118,19 +123,22 @@
           due: document.getElementById("tdue").value,
           priority: document.getElementById("tpriority").value
         };
+
         const file = document.getElementById("tfile").files[0];
         if(file) {
           const fRef = storageRef(storage, `tasks/${Date.now()}_${file.name}`);
           await uploadBytes(fRef, file);
           data.fileUrl = await getDownloadURL(fRef);
         }
+
         if(editId) {
-          await updateDoc(doc(db,"tasks",editId), data);
+          await updateDoc(doc(db, "tasks", editId), data);
         } else {
-          await addDoc(collection(db,"tasks"), data);
+          await addDoc(collection(db, "tasks"), data);
         }
+
         document.getElementById("taskModal").style.display = "none";
-        loadTasks(); // Refresh tasks after add/update
+        loadTasks();
       };
 
       document.getElementById("searchInput").oninput = loadTasks;
@@ -142,22 +150,27 @@
       const tbody = document.getElementById("taskTableBody");
       tbody.innerHTML = "";
       let idx = 1;
+
       snapshot.forEach(docSnap => {
         const t = docSnap.data();
         const matches = t.name.toLowerCase().includes(search) ||
                         t.status.toLowerCase().includes(search) ||
                         t.priority.toLowerCase().includes(search);
-        if(!search || matches) {
+
+        if (!search || matches) {
           const tr = document.createElement("tr");
-          tr.innerHTML = `<td>${idx++}</td>
+          tr.innerHTML = `
+            <td>${idx++}</td>
             <td>${t.name}</td>
             <td>${t.status}</td>
             <td>${t.start}</td>
             <td>${t.due}</td>
             <td>${t.priority}</td>
-            <td><button onclick="editTask('${docSnap.id}')">Edit</button>
-                <button onclick="deleteTask('${docSnap.id}')">Delete</button>
-                ${t.fileUrl ? `<a href="${t.fileUrl}" target="_blank">Attachment</a>` : ""}</td>`;
+            <td>
+              <button onclick="editTask('${docSnap.id}')">Edit</button>
+              <button onclick="deleteTask('${docSnap.id}')">Delete</button>
+              ${t.fileUrl ? `<a href="${t.fileUrl}" target="_blank">Attachment</a>` : ""}
+            </td>`;
           tbody.appendChild(tr);
         }
       });
@@ -169,15 +182,15 @@
 
     async function deleteTask(id) {
       if(confirm("Delete task?")) {
-        await deleteDoc(doc(db,"tasks",id));
+        await deleteDoc(doc(db, "tasks", id));
         loadTasks();
       }
     }
 
     async function editTask(id) {
       editId = id;
-      const docSnap = await getDocs(collection(db,"tasks"));
-      docSnap.forEach(d=>{
+      const docSnap = await getDocs(collection(db, "tasks"));
+      docSnap.forEach(d => {
         if(d.id === id) {
           const t = d.data();
           document.getElementById("tname").value = t.name;
@@ -236,8 +249,10 @@
     <div id="tasksSec" class="section">
       <h2>Tasks</h2>
       <input type="text" id="searchInput" placeholder="Search by name/status/priority" />
-      <table><thead><tr><th>#</th><th>Name</th><th>Status</th><th>Start</th><th>Due</th><th>Priority</th><th>Actions</th></tr></thead>
-      <tbody id="taskTableBody"><tr><td colspan="7">No tasks yet.</td></tr></tbody></table>
+      <table>
+        <thead><tr><th>#</th><th>Name</th><th>Status</th><th>Start</th><th>Due</th><th>Priority</th><th>Actions</th></tr></thead>
+        <tbody id="taskTableBody"><tr><td colspan="7">No tasks yet.</td></tr></tbody>
+      </table>
     </div>
 
     <div id="leadsSec" class="section"><h2>Leads (coming soon)</h2></div>
@@ -253,10 +268,20 @@
     <h3 id="modalTitle">Add Task</h3>
     <form id="taskForm">
       <input type="text" id="tname" placeholder="Name" required />
-      <select id="tstatus" required><option value="">Status</option><option>Not Started</option><option>In Progress</option><option>Completed</option></select>
+      <select id="tstatus" required>
+        <option value="">Status</option>
+        <option>Not Started</option>
+        <option>In Progress</option>
+        <option>Completed</option>
+      </select>
       <input type="date" id="tstart" required />
       <input type="date" id="tdue" required />
-      <select id="tpriority" required><option value="">Priority</option><option>Low</option><option>Normal</option><option>Urgent</option></select>
+      <select id="tpriority" required>
+        <option value="">Priority</option>
+        <option>Low</option>
+        <option>Normal</option>
+        <option>Urgent</option>
+      </select>
       <input type="file" id="tfile" />
       <button type="submit" class="submit">Submit</button>
     </form>
