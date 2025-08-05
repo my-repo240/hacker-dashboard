@@ -32,7 +32,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getFirestore, collection, addDoc, onSnapshot, doc, deleteDoc, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, onSnapshot, doc, deleteDoc, updateDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
     import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
     const firebaseConfig = {
@@ -68,10 +68,21 @@
         e.preventDefault();
         const email = document.getElementById("loginEmail").value;
         const pass = document.getElementById("loginPassword").value;
+
+        const allowedUsers = [
+          "Ismaillogistics@gmail.com",
+          "Ashiklogistics@gmail.com"
+        ];
+
+        if (!allowedUsers.includes(email)) {
+          alert("Access denied: You are not authorized.");
+          return;
+        }
+
         try {
           await signInWithEmailAndPassword(auth, email, pass);
-        } catch {
-          await createUserWithEmailAndPassword(auth, email, pass);
+        } catch (error) {
+          alert("Login failed. Please check your email and password.");
         }
       });
 
@@ -119,6 +130,7 @@
           await addDoc(collection(db,"tasks"), data);
         }
         document.getElementById("taskModal").style.display = "none";
+        loadTasks(); // Refresh tasks after add/update
       };
 
       document.getElementById("searchInput").oninput = loadTasks;
@@ -145,14 +157,21 @@
             <td>${t.priority}</td>
             <td><button onclick="editTask('${docSnap.id}')">Edit</button>
                 <button onclick="deleteTask('${docSnap.id}')">Delete</button>
-                ${t.fileUrl?`<a href="${t.fileUrl}" target="_blank">Attachment</a>`:""}</td>`;
+                ${t.fileUrl ? `<a href="${t.fileUrl}" target="_blank">Attachment</a>` : ""}</td>`;
           tbody.appendChild(tr);
         }
       });
+
+      if (tbody.children.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7">No tasks found.</td></tr>';
+      }
     }
 
     async function deleteTask(id) {
-      if(confirm("Delete task?")) await deleteDoc(doc(db,"tasks",id)), loadTasks();
+      if(confirm("Delete task?")) {
+        await deleteDoc(doc(db,"tasks",id));
+        loadTasks();
+      }
     }
 
     async function editTask(id) {
